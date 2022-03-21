@@ -247,8 +247,6 @@ public class MainWindow {
 		app.init();
 		app.run();
 		
-//		SQLUtility.dictionaryFilling();
-//		SQLUtility.initAdvantageTables();
-//		Model.setFriendAndFoes("abaddon");
+		
 	}
 }

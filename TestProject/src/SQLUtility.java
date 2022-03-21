@@ -65,6 +65,31 @@ public class SQLUtility {
 		}
 	}
 	
+	public static void setFriendAndFoes(String truename, boolean exists) {
+		try {
+			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
+			try {
+				Scanner scan = new Scanner(System.in);
+
+                
+//                for(int i = 5; i > 0; i--) {
+//                	con.createStatement().executeUpdate("update " + truename + " set heroname = '" + scan.nextLine() + "' where advantage = " + i);
+//                }
+//                for(int i = -5; i < 0; i++) {
+//                	con.createStatement().executeUpdate("update " + truename + " set heroname = '" + scan.nextLine() + "' where advantage = " + i);
+//                }
+                
+                
+				scan.close();
+                
+			} finally {
+				con.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void insertTruenamePair(String jargon, String truename) {					// adds a new jargon-truename relation in the DB
 		try {
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);

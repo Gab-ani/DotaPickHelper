@@ -104,34 +104,4 @@ public class Model {
 		pickOrder = new int[] {0,1,5,6,2,3,7,8,4,9};   	// these are indexes for wholePick massive to add into, scheme is 2r-2d-2r-2d-1r-1d (Dota2 pub 2022y)
 	}
 	
-	public static void setFriendAndFoes(String truename, boolean exists) {
-		try {
-			Class.forName("org.postgresql.Driver");
-			String url = "jdbc:postgresql://localhost:5432/Dota2Picker";
-			String login = "postgres";
-			String password = "pstgrs2022gfhjkm";
-			Connection con = DriverManager.getConnection(url, login, password);
-			try {
-            	
-				Scanner scan = new Scanner(System.in);
-
-                
-//                for(int i = 5; i > 0; i--) {
-//                	con.createStatement().executeUpdate("update " + truename + " set heroname = '" + scan.nextLine() + "' where advantage = " + i);
-//                }
-//                for(int i = -5; i < 0; i++) {
-//                	con.createStatement().executeUpdate("update " + truename + " set heroname = '" + scan.nextLine() + "' where advantage = " + i);
-//                }
-                
-                
-				scan.close();
-                
-			} finally {
-				con.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 }
