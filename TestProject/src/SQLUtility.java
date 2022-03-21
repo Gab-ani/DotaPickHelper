@@ -37,20 +37,19 @@ public class SQLUtility {
 	
 	public static void insertTruenamePair(String jargon, String truename) {					// adds a new jargon-truename relation in the DB
 		try {
-            Class.forName(driver);
-            Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
-            try {
-            	String sql = "INSERT INTO TRUENAMES (JARGON, TRUENAME) VALUES (?, ?)";
-            	PreparedStatement stmt = con.prepareStatement(sql);
-            	stmt.setString(1, jargon);
-            	stmt.setString(2, truename.replace(' ', '_'));
-            	stmt.executeUpdate();
-//                stmt.close();
-            } finally {
-                con.close();
-            }
+			Class.forName(driver);
+			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
+			try {
+				String sql = "INSERT INTO TRUENAMES (JARGON, TRUENAME) VALUES (?, ?)";
+				PreparedStatement stmt = con.prepareStatement(sql);
+				stmt.setString(1, jargon);
+				stmt.setString(2, truename.replace(' ', '_'));
+				stmt.executeUpdate();
+			} finally {
+				con.close();
+			}
 		} catch (Exception e) {
-            e.printStackTrace();
-        }
+			e.printStackTrace();
+		}
 	}
 }
