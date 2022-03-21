@@ -98,10 +98,10 @@ public class Hero {
 //		System.out.println(part);
 		Hero res = Hero.createUnknown();
 		try {
-            Class.forName("org.postgresql.Driver");
-            String url = "jdbc:postgresql://localhost:5432/Dota2Picker";
-            String login = "postgres";
-            String password = "pstgrs2022gfhjkm";
+            //Class.forName(SQLUtility.driver);
+            String url = SQLUtility.baseURL;
+            String login = SQLUtility.login;
+            String password = SQLUtility.password;
             Connection con = DriverManager.getConnection(url, login, password);
             try {
                 Statement stmt = con.createStatement();
