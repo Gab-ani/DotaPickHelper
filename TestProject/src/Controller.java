@@ -54,7 +54,6 @@ public class Controller {
 					try {
 						logic.addCandidate();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					logic.setCandidate(Hero.createUnknown());

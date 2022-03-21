@@ -106,14 +106,14 @@ public class Model {
 	
 	public static void setFriendAndFoes(String truename, boolean exists) {
 		try {
-            Class.forName("org.postgresql.Driver");
-            String url = "jdbc:postgresql://localhost:5432/Dota2Picker";
-            String login = "postgres";
-            String password = "pstgrs2022gfhjkm";
-            Connection con = DriverManager.getConnection(url, login, password);
-            try {
+			Class.forName("org.postgresql.Driver");
+			String url = "jdbc:postgresql://localhost:5432/Dota2Picker";
+			String login = "postgres";
+			String password = "pstgrs2022gfhjkm";
+			Connection con = DriverManager.getConnection(url, login, password);
+			try {
             	
-                Scanner scan = new Scanner(System.in);
+				Scanner scan = new Scanner(System.in);
 
                 
 //                for(int i = 5; i > 0; i--) {
@@ -124,14 +124,14 @@ public class Model {
 //                }
                 
                 
-                scan.close();
+				scan.close();
                 
-            } finally {
-                con.close();
-            }
+			} finally {
+				con.close();
+			}
 		} catch (Exception e) {
-            e.printStackTrace();
-        }
+			e.printStackTrace();
+		}
 	}
 	
 }

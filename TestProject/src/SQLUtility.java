@@ -35,9 +35,38 @@ public class SQLUtility {
 		return;
 	}
 	
+	public static void initAdvantageTables() throws ClassNotFoundException {
+		Class.forName(SQLUtility.driver);
+		try {
+			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
+			try {
+                Statement getHeroes = con.createStatement();
+                ResultSet heroesList = getHeroes.executeQuery("select distinct truename from truenames order by truename asc");
+                while (heroesList.next()) {
+                	System.out.println(heroesList.getString("truename"));
+                	Statement createTable = con.createStatement();
+                	try {                
+                		System.out.println("create table " + heroesList.getString("truename") + " ( hero text, advantage real )");
+                    	createTable.executeQuery("create table " + heroesList.getString("truename") + " ( hero text, advantage real )");
+                	} catch (Exception e) {
+                		//e.printStackTrace();
+                		System.out.println("no return information");                        // always procs exception because query didn't return anything.
+                		//createTable.close();												// I don't know how to escape this, so just ignoring it - tables are created anyway
+                    }
+                	createTable.close();
+                }
+                heroesList.close();
+                getHeroes.close();
+            } finally {
+                con.close();
+            }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void insertTruenamePair(String jargon, String truename) {					// adds a new jargon-truename relation in the DB
 		try {
-			Class.forName(driver);
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
 			try {
 				String sql = "INSERT INTO TRUENAMES (JARGON, TRUENAME) VALUES (?, ?)";

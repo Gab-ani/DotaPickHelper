@@ -230,7 +230,7 @@ public class MainWindow {
 		//Model.createTablesForAll();
 	}
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		
 		Model model = new Model();
 		MainWindow app = new MainWindow();
@@ -244,11 +244,11 @@ public class MainWindow {
 		
 		app.model.setApp(app);
 		
-		app.init();
-		app.run();
+//		app.init();
+//		app.run();
 		
 //		SQLUtility.dictionaryFilling();
-		
+		SQLUtility.initAdvantageTables();
 //		Model.setFriendAndFoes("abaddon");
 	}
 }

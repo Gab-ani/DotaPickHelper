@@ -14,17 +14,6 @@ public class Hero {
 	private ImageIcon icon;
 	private String role;
 	
-//	private Hero[] counteringHim;
-//	private Hero[] counteredByHim;
-//	
-//	//TODO
-//	private void fetchCountering() {
-//		
-//	}
-//	private void fetchCountered() {
-//		
-//	}
-	
 	public String getRole() {
 		return this.role;
 	}
@@ -55,50 +44,16 @@ public class Hero {
 		return true;
 	}
 	
-//	public static Hero fetchByTruename(String name) {
-//		Hero fetched = new Hero();
-//		try {
-//            Class.forName("org.postgresql.Driver");
-//            String url = "jdbc:postgresql://localhost:5432/Dota2Picker";
-//            String login = "postgres";
-//            String password = "pstgrs2022gfhjkm";
-//            Connection con = DriverManager.getConnection(url, login, password);
-//            try {
-//                Statement stmt = con.createStatement();
-//                ResultSet rs = stmt.executeQuery("SELECT * FROM " + name);
-//                
-//                fetched.name = name;
-//                fetched.icon = ImageIO.read(new File("icons/" + name + ".webp"));
-//                
-////                fetched.counteredByHim = new Hero[10];
-////                for(int i = 0; i < 10; i++) {
-////                	
-////                }
-//                
-//                rs.close();
-//                stmt.close();
-//            } finally {
-//                con.close();
-//            }
-//		} catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//		return fetched;
-//	}
-	
 	public static Hero createUnknown() {
 		Hero res = new Hero();
 		res.name = "unknown";
 		res.setIcon(new ImageIcon("resources/icons/unknown.png"));
-		//TODO картинка
 		return res;
 	}
 	
 	public static Hero guessFromInput(String part) {
-//		System.out.println(part);
 		Hero res = Hero.createUnknown();
 		try {
-            //Class.forName(SQLUtility.driver);
             String url = SQLUtility.baseURL;
             String login = SQLUtility.login;
             String password = SQLUtility.password;
@@ -110,10 +65,8 @@ public class Hero {
                 	if(compare(part, rs.getString("jargon"))) {
                 		res = new Hero();
                 		res.name = rs.getString("truename");
-//                		System.out.println("icons/" + res.name + ".png");
                 		ImageIcon i = new ImageIcon(ImageIO.read(new File("resources/icons/" + res.name + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH));
                 		res.icon = i;
- //               		res = fetchByTruename(rs.getString("truename"));
                 	}
                 }
                 rs.close();
