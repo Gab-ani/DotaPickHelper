@@ -80,7 +80,7 @@ public class MainWindow {
 	
 	public void updateCandidateName() {
 		//getCandidateLabel().setText(model.getCandidate().getName());
-		ImageIcon icon = new ImageIcon("icons/" + model.getCandidate().getName() + ".png");
+		ImageIcon icon = new ImageIcon("resources/icons/" + model.getCandidate().getName() + ".png");
 		Image imageToRescale = icon.getImage().getScaledInstance(256, 144, Image.SCALE_SMOOTH);
 		icon = new ImageIcon(imageToRescale);
 		//ImageIcon i = model.getCandidate().getIcon();

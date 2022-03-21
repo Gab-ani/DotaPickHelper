@@ -89,7 +89,7 @@ public class Hero {
 	public static Hero createUnknown() {
 		Hero res = new Hero();
 		res.name = "unknown";
-		res.setIcon(new ImageIcon("icons/unknown.png"));
+		res.setIcon(new ImageIcon("resources/icons/unknown.png"));
 		//TODO картинка
 		return res;
 	}
@@ -111,7 +111,7 @@ public class Hero {
                 		res = new Hero();
                 		res.name = rs.getString("truename");
 //                		System.out.println("icons/" + res.name + ".png");
-                		ImageIcon i = new ImageIcon(ImageIO.read(new File("icons/" + res.name + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH));
+                		ImageIcon i = new ImageIcon(ImageIO.read(new File("resources/icons/" + res.name + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH));
                 		res.icon = i;
  //               		res = fetchByTruename(rs.getString("truename"));
                 	}
