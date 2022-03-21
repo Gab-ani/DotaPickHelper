@@ -65,6 +65,7 @@ public class Hero {
                 	if(compare(part, rs.getString("jargon"))) {
                 		res = new Hero();
                 		res.name = rs.getString("truename");
+//                		System.out.println(rs.getString("truename"));
                 		ImageIcon i = new ImageIcon(ImageIO.read(new File("resources/icons/" + res.name + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH));
                 		res.icon = i;
                 	}

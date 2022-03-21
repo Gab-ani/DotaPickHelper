@@ -244,11 +244,11 @@ public class MainWindow {
 		
 		app.model.setApp(app);
 		
-//		app.init();
-//		app.run();
+		app.init();
+		app.run();
 		
 //		SQLUtility.dictionaryFilling();
-		SQLUtility.initAdvantageTables();
+//		SQLUtility.initAdvantageTables();
 //		Model.setFriendAndFoes("abaddon");
 	}
 }

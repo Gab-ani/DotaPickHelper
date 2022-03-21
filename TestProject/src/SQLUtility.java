@@ -35,9 +35,9 @@ public class SQLUtility {
 		return;
 	}
 	
-	public static void initAdvantageTables() throws ClassNotFoundException {
-		Class.forName(SQLUtility.driver);
-		try {
+	public static void initAdvantageTables() throws ClassNotFoundException {				// this intended to be used once in a lifetime to create a batch of empty tables,
+		Class.forName(SQLUtility.driver);													// a table for every unique name in truenames table (read for every hero in dota2),
+		try {																				// those tables will contain data about heroes counterpicks
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
 			try {
                 Statement getHeroes = con.createStatement();
