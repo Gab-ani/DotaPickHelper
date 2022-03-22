@@ -68,28 +68,28 @@ public class Model {
 		}
 	}
 	
-	private HashMap<String, Hero> getAllHeroes() {
-		
-		HashMap<String, Hero> heroesMap = new HashMap<>();
-
-		try {
-			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
-			try {
-				
-				Statement getHeroes = con.createStatement();
-                ResultSet heroesList = getHeroes.executeQuery("select distinct truename from truenames order by truename asc");
-                while (heroesList.next()) {
-                	heroesMap.put(heroesList.getString("truename"), new Hero());
-                }
-				
-			} finally {
-				con.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
+//	private HashMap<String, Hero> getAllHeroes() {
+//		
+//		HashMap<String, Hero> heroesMap = new HashMap<>();
+//
+//		try {
+//			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
+//			try {
+//				
+//				Statement getHeroes = con.createStatement();
+//                ResultSet heroesList = getHeroes.executeQuery("select distinct truename from truenames order by truename asc");
+//                while (heroesList.next()) {
+//                	heroesMap.put(heroesList.getString("truename"), new Hero());
+//                }
+//				
+//			} finally {
+//				con.close();
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//	}
 	
 	public void addCandidate() throws IOException {						// sets a hero in the next in line pick slot 
 		if(currentIndex < 10 ) {
