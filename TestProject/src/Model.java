@@ -68,32 +68,71 @@ public class Model {
 		}
 	}
 	
-//	private HashMap<String, Hero> getAllHeroes() {
-//		
-//		HashMap<String, Hero> heroesMap = new HashMap<>();
-//
-//		try {
-//			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
-//			try {
-//				
-//				Statement getHeroes = con.createStatement();
-//                ResultSet heroesList = getHeroes.executeQuery("select distinct truename from truenames order by truename asc");
-//                while (heroesList.next()) {
-//                	heroesMap.put(heroesList.getString("truename"), new Hero());
-//                }
-//				
-//			} finally {
-//				con.close();
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		
-//	}
+	public HashMap<String, Hero> getSupports() {			// actually returns not-cores
+		HashMap<String, Hero> heroesMap = new HashMap<>();
+		try {
+			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
+			try {
+				Statement getHeroes = con.createStatement();
+                ResultSet heroesList = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
+                while (heroesList.next()) {
+                	if(!heroesList.getString("role").equals("core"))
+                		heroesMap.put(heroesList.getString("truename"), new Hero(heroesList.getString("truename"), heroesList.getString("role")));
+                }
+				
+			} finally {
+				con.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return heroesMap;
+	}
+	
+	public HashMap<String, Hero> getCores() {				// actually returns not-supports
+		HashMap<String, Hero> heroesMap = new HashMap<>();
+		try {
+			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
+			try {
+				Statement getHeroes = con.createStatement();
+                ResultSet heroesList = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
+                while (heroesList.next()) {
+                	if(!heroesList.getString("role").equals("supp"))
+                		heroesMap.put(heroesList.getString("truename"), new Hero(heroesList.getString("truename"), heroesList.getString("role")));
+                }
+				
+			} finally {
+				con.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return heroesMap;
+	}
+	
+	public HashMap<String, Hero> getAllHeroes() {
+		HashMap<String, Hero> heroesMap = new HashMap<>();
+		try {
+			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
+			try {
+				Statement getHeroes = con.createStatement();
+                ResultSet heroesList = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
+                while (heroesList.next()) {
+                	heroesMap.put(heroesList.getString("truename"), new Hero(heroesList.getString("truename"), heroesList.getString("role")));
+                }
+				
+			} finally {
+				con.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return heroesMap;
+	}
 	
 	public void addCandidate() throws IOException {						// sets a hero in the next in line pick slot 
 		if(currentIndex < 10 ) {
-			for(int i = 0; i < currentIndex; i++) {     // checking if pick already has this hero
+			for(int i = 0; i < currentIndex; i++) {    					// checking if pick already has this hero
 				if(wholePick[pickOrder[i]].getName().equals(candidate.getName())) {     // to understand strange index operation see initPickOrder method below
 					System.out.println("дубль героя");
 					return;

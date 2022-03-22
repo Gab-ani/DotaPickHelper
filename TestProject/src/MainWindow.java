@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Collection;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -76,7 +77,6 @@ public class MainWindow {
 	}
 	
 	public void updateCandidateName() {
-		//getCandidateLabel().setText(model.getCandidate().getName());
 		ImageIcon icon = new ImageIcon("resources/icons/" + model.getCandidate().getName() + ".png");
 		Image imageToRescale = icon.getImage().getScaledInstance(256, 144, Image.SCALE_SMOOTH);
 		icon = new ImageIcon(imageToRescale);
@@ -236,6 +236,8 @@ public class MainWindow {
 //		app.init();
 //		app.run();
 		
-		SQLUtility.setRolesColumn();
+//		model.getSupports().forEach((name, hero) -> {
+//			System.out.println(name + " " + hero.getRole());
+//		});
 	}
 }

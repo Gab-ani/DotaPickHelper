@@ -17,7 +17,7 @@ public class SQLUtility {
 	public static final String login = "postgres";
 	public static final String password = "pstgrs2022gfhjkm";
 	
-	public static void dictionaryFilling() {					// adds new jargon-truename pairs in a cycle
+	public static void dictionaryFilling() {				// adds new jargon-truename pairs in a cycle
 		System.out.println("type 'end' to exit");
 		Scanner scan = new Scanner(System.in);
 		while(scan.hasNextLine()) {
@@ -35,8 +35,8 @@ public class SQLUtility {
 		return;
 	}
 	
-	public static void setRolesColumn() {												// method creates values for column "role" in truenames table in cycle
-		Scanner scan = new Scanner(System.in);											// order of work - read hero name then type "core", "supp" or "both"
+	public static void setRolesColumn() {					// method creates values for column "role" in truenames table in cycle
+		Scanner scan = new Scanner(System.in);				// order of work - read hero name then type "core", "supp" or "both"
 		try {																			
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
 			try {
