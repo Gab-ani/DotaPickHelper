@@ -35,8 +35,25 @@ public class SQLUtility {
 		return;
 	}
 	
-	public static void createRoleColumn() {
-		
+	public static void setRolesColumn() {												// method creates values for column "role" in truenames table in cycle
+		Scanner scan = new Scanner(System.in);											// order of work - read hero name then type "core", "supp" or "both"
+		try {																			
+			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
+			try {
+				Statement getHeroes = con.createStatement();
+                ResultSet heroesList = getHeroes.executeQuery("select distinct truename from truenames order by truename asc");
+                while (heroesList.next()) {
+                	System.out.println(heroesList.getString("truename") + "?");
+                	Statement insertRole = con.createStatement();
+                	insertRole.executeUpdate("update truenames set role = '" + scan.nextLine() + "' where truename = '" + heroesList.getString("truename") + "'");
+                }
+			} finally {
+				con.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		scan.close();
 	}
 	
 	public static void initAdvantageTables() throws ClassNotFoundException {				// this intended to be used once in a lifetime to create a batch of empty tables,
