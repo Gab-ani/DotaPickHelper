@@ -233,8 +233,8 @@ public class MainWindow {
 		
 		app.model.setApp(app);
 		
-//		app.init();
-//		app.run();
+		app.init();
+		app.run();
 		
 //		model.getSupports().forEach((name, hero) -> {
 //			System.out.println(name + " " + hero.getRole());

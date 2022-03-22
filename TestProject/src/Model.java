@@ -19,8 +19,11 @@ public class Model {
 	
 	private Hero[] wholePick;
 	
-	private Hero[] supportRow;
-	private Hero[] coreRow;
+	private Hero[] suggestedSupports;
+	private Hero[] suggestedCores;
+	
+	private HashMap<String, Hero> allSupports;
+	private HashMap<String, Hero> allCores;
 	
 	private MainWindow app;
 	
@@ -59,6 +62,12 @@ public class Model {
 	
 	public void initHeroBase() {
 		candidate = Hero.createUnknown();
+		
+		suggestedSupports = new Hero[5];
+		suggestedCores = new Hero[5];
+		
+		allCores = getCores();
+		allSupports = getSupports();
 	}
 	
 	public void initTeams() {
@@ -68,7 +77,13 @@ public class Model {
 		}
 	}
 	
-	public HashMap<String, Hero> getSupports() {			// actually returns not-cores
+	public void updateSuggestions() {
+		
+		
+		
+	}
+	
+	private HashMap<String, Hero> getSupports() {			// actually returns not-cores
 		HashMap<String, Hero> heroesMap = new HashMap<>();
 		try {
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
@@ -89,7 +104,7 @@ public class Model {
 		return heroesMap;
 	}
 	
-	public HashMap<String, Hero> getCores() {				// actually returns not-supports
+	private HashMap<String, Hero> getCores() {				// actually returns not-supports
 		HashMap<String, Hero> heroesMap = new HashMap<>();
 		try {
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
@@ -110,7 +125,7 @@ public class Model {
 		return heroesMap;
 	}
 	
-	public HashMap<String, Hero> getAllHeroes() {
+	private HashMap<String, Hero> getAllHeroes() {			// isn't used anywhere, but not having it is very strange considering getCores() and getSupport() exist
 		HashMap<String, Hero> heroesMap = new HashMap<>();
 		try {
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
@@ -131,6 +146,8 @@ public class Model {
 	}
 	
 	public void addCandidate() throws IOException {						// sets a hero in the next in line pick slot 
+		allCores.remove(candidate.getName());
+		allSupports.remove(candidate.getName());
 		if(currentIndex < 10 ) {
 			for(int i = 0; i < currentIndex; i++) {    					// checking if pick already has this hero
 				if(wholePick[pickOrder[i]].getName().equals(candidate.getName())) {     // to understand strange index operation see initPickOrder method below
