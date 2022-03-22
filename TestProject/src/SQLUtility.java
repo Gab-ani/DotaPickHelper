@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -146,5 +147,10 @@ public class SQLUtility {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static HashMap<Hero, Double> getAdvantageTable(Hero hero) {
+		// TODO method
+		return null;
 	}
 }

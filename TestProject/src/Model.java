@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -22,8 +23,8 @@ public class Model {
 	private Hero[] suggestedSupports;
 	private Hero[] suggestedCores;
 	
-	private HashMap<String, Hero> allSupports;
-	private HashMap<String, Hero> allCores;
+	private ArrayList<Hero> allSupports;							// actually all non-cores
+	private ArrayList<Hero> allCores;								// actually all non-supports, some heroes have third role "both" and stored in both maps
 	
 	private MainWindow app;
 	
@@ -83,37 +84,23 @@ public class Model {
 		
 	}
 	
-	private HashMap<String, Hero> getSupports() {			// actually returns not-cores
-		HashMap<String, Hero> heroesMap = new HashMap<>();
-		try {
-			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
-			try {
-				Statement getHeroes = con.createStatement();
-                ResultSet heroesList = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
-                while (heroesList.next()) {
-                	if(!heroesList.getString("role").equals("core"))
-                		heroesMap.put(heroesList.getString("truename"), new Hero(heroesList.getString("truename"), heroesList.getString("role")));
-                }
-				
-			} finally {
-				con.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+	private void calculateAdvantage(Hero hero) {									// calculates one hero advantage over 
+		HashMap<Hero, Double> advantages = SQLUtility.getAdvantageTable(hero);
+		for(int i = 0; i < wholePick.length; i++) {
+			hero.setAdvantage(hero.getAdvantage() + );
 		}
-		return heroesMap;
 	}
 	
-	private HashMap<String, Hero> getCores() {				// actually returns not-supports
-		HashMap<String, Hero> heroesMap = new HashMap<>();
+	private ArrayList<Hero> getSupports() {			// actually returns not-cores
+		ArrayList<Hero> heroesList = new ArrayList<Hero>();
 		try {
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
 			try {
 				Statement getHeroes = con.createStatement();
-                ResultSet heroesList = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
-                while (heroesList.next()) {
-                	if(!heroesList.getString("role").equals("supp"))
-                		heroesMap.put(heroesList.getString("truename"), new Hero(heroesList.getString("truename"), heroesList.getString("role")));
+                ResultSet heroes = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
+                while (heroes.next()) {
+                	if(!heroes.getString("role").equals("core"))
+                		heroesList.add(new Hero(heroes.getString("truename"), heroes.getString("role")));
                 }
 				
 			} finally {
@@ -122,18 +109,19 @@ public class Model {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return heroesMap;
+		return heroesList;
 	}
 	
-	private HashMap<String, Hero> getAllHeroes() {			// isn't used anywhere, but not having it is very strange considering getCores() and getSupport() exist
-		HashMap<String, Hero> heroesMap = new HashMap<>();
+	private ArrayList<Hero> getCores() {				// actually returns not-supports
+		ArrayList<Hero> heroesList = new ArrayList<>();
 		try {
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
 			try {
 				Statement getHeroes = con.createStatement();
-                ResultSet heroesList = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
-                while (heroesList.next()) {
-                	heroesMap.put(heroesList.getString("truename"), new Hero(heroesList.getString("truename"), heroesList.getString("role")));
+                ResultSet heroes = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
+                while (heroes.next()) {
+                	if(!heroes.getString("role").equals("supp"))
+                		heroesList.add(new Hero(heroes.getString("truename"), heroes.getString("role")));
                 }
 				
 			} finally {
@@ -142,7 +130,27 @@ public class Model {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return heroesMap;
+		return heroesList;
+	}
+	
+	private ArrayList<Hero> getAllHeroes() {			// isn't used anywhere, but not having it is very strange considering getCores() and getSupport() exist
+		ArrayList<Hero> heroesList = new ArrayList<>();
+		try {
+			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
+			try {
+				Statement getHeroes = con.createStatement();
+                ResultSet heroes = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
+                while (heroes.next()) {
+                	heroesList.add(new Hero(heroes.getString("truename"), heroes.getString("role")));
+                }
+				
+			} finally {
+				con.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return heroesList;
 	}
 	
 	public void addCandidate() throws IOException {						// sets a hero in the next in line pick slot 

@@ -9,10 +9,11 @@ import java.sql.Statement;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-public class Hero {
+public class Hero implements Comparable<Hero> {
 	private String name;
 	private ImageIcon icon;
 	private String role;
+	private double advantage;
 	
 	public Hero() {
 		
@@ -39,11 +40,19 @@ public class Hero {
 		name = n;
 	}
 	
+	public void setAdvantage(double adv) {
+		advantage = adv;
+	}
+	
+	public double getAdvantage() {
+		return this.advantage;
+	}
+	
 	public String getName() {
 		return this.name;
 	}
 	
-	public static boolean compare(String given, String fetched) {			//  given is a name user typed on the candidate label,
+	public static boolean compareWithInput(String given, String fetched) {			//  given is a name user typed on the candidate label,
 		char[] givenChars = given.toCharArray();							//  fetched is current jargon-column value from DB
 		char[] fetchedChars = fetched.toCharArray();
 		for(int i = 0; i < Math.min(fetchedChars.length, givenChars.length); i++) {
@@ -71,7 +80,7 @@ public class Hero {
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery("SELECT * FROM TRUENAMES");
                 while (rs.next()) {
-                	if(compare(part, rs.getString("jargon"))) {
+                	if(compareWithInput(part, rs.getString("jargon"))) {
                 		res = new Hero();
                 		res.name = rs.getString("truename");
 //                		System.out.println(rs.getString("truename"));
@@ -89,5 +98,14 @@ public class Hero {
         }
 //		System.out.println("вернули нуль");
 		return res;
+	}
+
+	@Override
+	public int compareTo(Hero h) {
+		if(advantage < h.advantage)
+			return -1;
+		if(advantage > h.advantage)
+			return 1;
+		return 0;
 	}
 }
