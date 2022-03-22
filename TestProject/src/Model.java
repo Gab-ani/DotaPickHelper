@@ -26,7 +26,6 @@ public class Model {
 	//private String candidateName = "";
 	private Hero candidate;
 	
-	//////////////////////////////////////////////////////// + GETTERS
 	public Hero[] getPick() {
 		return wholePick;
 	}
@@ -42,8 +41,6 @@ public class Model {
 	public String getCandidateName() {
 		return candidate.getName();
 	}
-	//////////////////////////////////////////////////////// - GETTERS
-	//////////////////////////////////////////////////////// + SETTERS
 	
 	public void setCandidate(Hero hero){
 		candidate = hero;
@@ -53,7 +50,6 @@ public class Model {
 	public void setApp(MainWindow a) {
 		app = a;
 	}
-	//////////////////////////////////////////////////////// - SETTERS
 	
 	public void guessCandidate(String name){
 		candidate = Hero.guessFromInput(name);
@@ -70,10 +66,6 @@ public class Model {
 			wholePick[i] = Hero.createUnknown();
 		}
 	}
-	
-//	public void updateCandidate() {
-//		
-//	}
 	
 	public void addCandidate() throws IOException {						// sets a hero in the next in line pick slot 
 		if(currentIndex < 10 ) {

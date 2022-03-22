@@ -65,21 +65,43 @@ public class SQLUtility {
 		}
 	}
 	
+	public static void advantageSetProcess() {
+		System.out.println("введите truename для героя, для преждевременного выхода из функции введите 'end'");
+		Scanner scan = new Scanner(System.in);
+		String inputName = scan.nextLine();
+		if(inputName.equals("end") || !tableExists(inputName)) {
+			scan.close();
+			return;
+		}
+		try {
+			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
+			try {
+				con.setAutoCommit(false);
+				System.out.println("контрпики");
+				for(int i = 0; i < 5; i++) {
+					String name = scan.next();
+					double advantage = scan.nextDouble();
+					Statement update = con.createStatement();
+					update.executeUpdate("INSERT INTO " + inputName + " VALUES ('" + name + "', " + advantage + ")");
+				}
+				
+				con.setAutoCommit(true);
+			} finally {
+				con.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		scan.close();
+	}
+	
 	public static void setFriendAndFoes(String truename, boolean exists) {
 		try {
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
 			try {
 				Scanner scan = new Scanner(System.in);
-
-                
-//                for(int i = 5; i > 0; i--) {
-//                	con.createStatement().executeUpdate("update " + truename + " set heroname = '" + scan.nextLine() + "' where advantage = " + i);
-//                }
-//                for(int i = -5; i < 0; i++) {
-//                	con.createStatement().executeUpdate("update " + truename + " set heroname = '" + scan.nextLine() + "' where advantage = " + i);
-//                }
-                
-                
+				
+				
 				scan.close();
                 
 			} finally {
@@ -90,7 +112,25 @@ public class SQLUtility {
 		}
 	}
 	
-	public static void insertTruenamePair(String jargon, String truename) {					// adds a new jargon-truename relation in the DB
+	private static boolean tableExists(String name) {
+		try {
+			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
+			try {
+				Statement checkTable = con.createStatement();
+				ResultSet checkResults = checkTable.executeQuery("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='" + name + "'");
+				if(checkResults.next()) {
+					return true;
+				}
+			} finally {
+				con.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	private static void insertTruenamePair(String jargon, String truename) {					// adds a new jargon-truename relation in the DB
 		try {
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
 			try {

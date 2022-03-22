@@ -31,7 +31,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 public class MainWindow {
-	/////////////////////////////////////////////  + constants
+	
 	final static int windowWidth = 1500;
 	final static int windowHeight = 600;   			// global window
 	
@@ -44,10 +44,7 @@ public class MainWindow {
 	final static int candIconWidth = 256;			// central icon
 	final static int candIconHeight = 144;
 	
-	
-	
 	final static Rectangle textRect = new Rectangle(windowWidth / 2 + 240, windowHeight / 2 - 75, 290, 150);
-	/////////////////////////////////////////////  - constants
 	
 	Controller controller;
 	Model model;
@@ -86,7 +83,6 @@ public class MainWindow {
 		//ImageIcon i = model.getCandidate().getIcon();
 		getCandidateLabel().setIcon(icon);
 	}
-	////////////////////////////////////////////////////////	 + GETTERS
 	
 	public String getInput() {
 		return input;
@@ -103,8 +99,6 @@ public class MainWindow {
 	public JLabel[] getIcons() {
 		return pickIcons;
 	}
-	////////////////////////////////////////////////////////  	 - GETTERS
-	////////////////////////////////////////////////////////  	 + SETTERS
 	
 	public void setInput(String s) {
 		input = s;
@@ -119,7 +113,6 @@ public class MainWindow {
 		controller = c;
 	}
 	
-	////////////////////////////////////////////////////////  	 - SETTERS
 	private void init() throws IOException {
 		
 		JFrame window = new JFrame("Dota2Picker");
@@ -133,16 +126,12 @@ public class MainWindow {
 		
 		for(int i = 0; i < 5; i++) {		// left row
 			pickIcons[i] = new JLabel();
-//			icons[i].setBorder(BorderFactory.createBevelBorder(1));
-//			icons[i].setBackground(new Color(0, 255, 0));
 			pickIcons[i].setBounds(new Rectangle(heroIconStartSpaceX + i * (heroIconWidth + heroIconSpace), heroIconStartSpaceY, heroIconWidth, heroIconHeight));
 			window.add(pickIcons[i]);
 		}		
 		
 		for(int i = 9; i > 4; i--) {		// right row
 			pickIcons[i] = new JLabel("r" + i);
-//			icons[i].setBorder(BorderFactory.createBevelBorder(1));
-//			icons[i].setBackground(new Color(0, 255, 0));
 			pickIcons[i].setBounds(new Rectangle(window.getWidth() - heroIconStartSpaceX - (10-i) * (heroIconWidth + heroIconSpace), heroIconStartSpaceY, heroIconWidth, heroIconHeight));
 			window.add(pickIcons[i]);
 		}
@@ -244,9 +233,8 @@ public class MainWindow {
 		
 		app.model.setApp(app);
 		
-		app.init();
-		app.run();
-		
+//		app.init();
+//		app.run();
 		
 	}
 }
