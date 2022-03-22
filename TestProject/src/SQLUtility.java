@@ -65,11 +65,12 @@ public class SQLUtility {
 		}
 	}
 	
-	public static void advantageSetProcess() {
-		System.out.println("введите truename для героя, для преждевременного выхода из функции введите 'end'");
+	public static void advantageSetProcess() {          // TODO spirit breaker
+		System.out.println("введите truename для героя");
 		Scanner scan = new Scanner(System.in);
 		String inputName = scan.nextLine();
-		if(inputName.equals("end") || !tableExists(inputName)) {
+		if(!tableExists(inputName)) {
+			System.out.println("герой не найден");
 			scan.close();
 			return;
 		}
@@ -89,23 +90,6 @@ public class SQLUtility {
 			e.printStackTrace();
 		}
 		scan.close();
-	}
-	
-	public static void setFriendAndFoes(String truename, boolean exists) {
-		try {
-			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
-			try {
-				Scanner scan = new Scanner(System.in);
-				
-				
-				scan.close();
-                
-			} finally {
-				con.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	private static boolean tableExists(String name) {

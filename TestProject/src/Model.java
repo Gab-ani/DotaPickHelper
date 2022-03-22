@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -65,6 +66,29 @@ public class Model {
 		for(int i = 0; i < 10; i++) {
 			wholePick[i] = Hero.createUnknown();
 		}
+	}
+	
+	private HashMap<String, Hero> getAllHeroes() {
+		
+		HashMap<String, Hero> heroesMap = new HashMap<>();
+
+		try {
+			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
+			try {
+				
+				Statement getHeroes = con.createStatement();
+                ResultSet heroesList = getHeroes.executeQuery("select distinct truename from truenames order by truename asc");
+                while (heroesList.next()) {
+                	heroesMap.put(heroesList.getString("truename"), new Hero());
+                }
+				
+			} finally {
+				con.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public void addCandidate() throws IOException {						// sets a hero in the next in line pick slot 

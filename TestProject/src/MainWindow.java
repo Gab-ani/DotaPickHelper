@@ -236,5 +236,6 @@ public class MainWindow {
 //		app.init();
 //		app.run();
 		
+		SQLUtility.advantageSetProcess();
 	}
 }

@@ -38,7 +38,7 @@ public class Controller {
 				}
 				if(e.getKeyChar() == (KeyEvent.VK_BACK_SPACE)) {
 					if(app.getInput().length() > 0) {
-						app.setInput(app.getInput().substring(0, app.getInput().length() - 1));
+						app.setInput( app.getInput().substring( 0, app.getInput().length()-1 ) );
 						if(app.getInput().length() != 0)
 							logic.guessCandidate(app.getInput());
 						return;
