@@ -76,16 +76,12 @@ public class SQLUtility {
 		try {
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
 			try {
-				con.setAutoCommit(false);
-				System.out.println("контрпики");
-				for(int i = 0; i < 5; i++) {
+				for(int i = 0; i < 10; i++) {
 					String name = scan.next();
 					double advantage = scan.nextDouble();
 					Statement update = con.createStatement();
 					update.executeUpdate("INSERT INTO " + inputName + " VALUES ('" + name + "', " + advantage + ")");
 				}
-				
-				con.setAutoCommit(true);
 			} finally {
 				con.close();
 			}
