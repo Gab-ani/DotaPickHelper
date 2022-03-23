@@ -45,22 +45,29 @@ public class MainWindow {
 	final static int candIconWidth = 256;			// central icon
 	final static int candIconHeight = 144;
 	
-	final static Rectangle textRect = new Rectangle(windowWidth / 2 + 240, windowHeight / 2 - 75, 290, 150);
+	final static Rectangle textRect = new Rectangle(windowWidth / 2 - 145, windowHeight / 2 + 75, 290, 150);
 	
 	Controller controller;
 	Model model;
 	
 	private JLabel[] pickIcons;
 	
-	private JLabel[] suggestedSupportIcons;
-	private JLabel[] suggestedCoreIcons;
+	private JLabel[] suggestedSupportRadiant;
+	private JLabel[] suggestedCoreRadiant;
+	private JLabel[] suggestedSupportDire;
+	private JLabel[] suggestedCoreDire;
 	
 	private JButton candidateLabel;
+	
 	private String input;
 	private JLabel inputLabel;
+	
 	private JLabel nextHeroSlot;
-	private JLabel supportLabel;
-	private JLabel coreLabel;
+	
+	private JLabel supportLabelRadiant;
+	private JLabel coreLabelRadiant;
+	private JLabel supportLabelDire;
+	private JLabel coreLabelDire;
 	
 	public void updateNextSlotLabel(int index) {
 		nextHeroSlot.setLocation(pickIcons[index].getLocation().x + heroIconWidth / 2 - nextHeroSlot.getWidth() / 2, pickIcons[index].getLocation().y + heroIconHeight + 10);
@@ -121,7 +128,6 @@ public class MainWindow {
 		window.setLayout(null);
 		window.setResizable(false);
 		
-		/////////////////////////////////////////// + hero icons
 		pickIcons = new JLabel[10];
 		
 		for(int i = 0; i < 5; i++) {		// left row
@@ -135,16 +141,10 @@ public class MainWindow {
 			pickIcons[i].setBounds(new Rectangle(window.getWidth() - heroIconStartSpaceX - (10-i) * (heroIconWidth + heroIconSpace), heroIconStartSpaceY, heroIconWidth, heroIconHeight));
 			window.add(pickIcons[i]);
 		}
-		/////////////////////////////////////////// - hero icons
-		/////////////////////////////////////////// + candidate button
 		
 		candidateLabel = new JButton();
-		candidateLabel.setBounds(new Rectangle(window.getWidth() / 2 - candIconWidth / 2, window.getHeight() / 2 - candIconHeight / 2, candIconWidth, candIconHeight));
-		
+		candidateLabel.setBounds(new Rectangle(window.getWidth() / 2 - candIconWidth / 2, window.getHeight() / 2 - candIconHeight / 2 - 50, candIconWidth, candIconHeight));
 		window.add(candidateLabel);
-		
-		/////////////////////////////////////////// - candidate button
-		/////////////////////////////////////////// + candidate text
 		
 		inputLabel = new JLabel();
 		inputLabel.setBounds(textRect);
@@ -152,53 +152,73 @@ public class MainWindow {
 		inputLabel.setVerticalAlignment(JLabel.CENTER);
 		inputLabel.setHorizontalAlignment(JLabel.CENTER);
 		window.add(inputLabel);
-		
-		/////////////////////////////////////////// - candidate text
-		/////////////////////////////////////////// + nextHeroSlot
 				
 		nextHeroSlot = new JLabel();
 		nextHeroSlot.setIcon(new ImageIcon("icons/UpSide1.png"));
 		nextHeroSlot.setBounds(new Rectangle(100, 100, 60, 70));
 		updateNextSlotLabel(0);
 		window.add(nextHeroSlot);
-		
-		/////////////////////////////////////////// - nextHeroSlot
-		/////////////////////////////////////////// + supportLabels
 				
-		supportLabel = new JLabel("сап");
+		supportLabelRadiant = new JLabel("сап Radiant");
 //		supportLabel.setIcon(new ImageIcon("icons/support.png"));
-		supportLabel.setBorder(BorderFactory.createBevelBorder(1));
-		supportLabel.setBounds(new Rectangle(250, 200, 60, 30));
-		window.add(supportLabel);
+		supportLabelRadiant.setBorder(BorderFactory.createBevelBorder(1));
+		supportLabelRadiant.setBounds(new Rectangle(200, 200, 60, 30));
+		window.add(supportLabelRadiant);
 		
-		suggestedSupportIcons = new JLabel[5];
-		for(int i = 0; i < suggestedSupportIcons.length; i++) {
-			suggestedSupportIcons[i] = new JLabel("" + i);
-			suggestedSupportIcons[i].setBorder(BorderFactory.createBevelBorder(1));
-			suggestedSupportIcons[i].setBounds(new Rectangle(230, 190 + (i+1)*55, 100, 50));
-			window.add(suggestedSupportIcons[i]);
+		suggestedSupportRadiant = new JLabel[5];
+		for(int i = 0; i < suggestedSupportRadiant.length; i++) {
+			suggestedSupportRadiant[i] = new JLabel("" + i);
+			suggestedSupportRadiant[i].setBorder(BorderFactory.createBevelBorder(1));
+			suggestedSupportRadiant[i].setBounds(new Rectangle(180, 190 + (i+1)*55, 100, 50));
+			window.add(suggestedSupportRadiant[i]);
+		}
+		
+		coreLabelRadiant = new JLabel("кор Radiant");
+//		supportLabel.setIcon(new ImageIcon("icons/support.png"));
+		coreLabelRadiant.setBorder(BorderFactory.createBevelBorder(1));
+		coreLabelRadiant.setBounds(new Rectangle(400, 200, 60, 30));
+		window.add(coreLabelRadiant);
+		
+		suggestedCoreRadiant = new JLabel[5];
+		for(int i = 0; i < suggestedCoreRadiant.length; i++) {
+			suggestedCoreRadiant[i] = new JLabel("" + i);
+			suggestedCoreRadiant[i].setBorder(BorderFactory.createBevelBorder(1));
+			suggestedCoreRadiant[i].setBounds(new Rectangle(380, 190 + (i+1)*55, 100, 50));
+			window.add(suggestedCoreRadiant[i]);
+		}
+		
+		supportLabelDire = new JLabel("сап Dire");
+//		supportLabel.setIcon(new ImageIcon("icons/support.png"));
+		supportLabelDire.setBorder(BorderFactory.createBevelBorder(1));
+		supportLabelDire.setBounds(new Rectangle(1050, 200, 60, 30));
+		window.add(supportLabelDire);
+		
+		suggestedSupportDire = new JLabel[5];
+		for(int i = 0; i < suggestedSupportDire.length; i++) {
+			suggestedSupportDire[i] = new JLabel("" + i);
+			suggestedSupportDire[i].setBorder(BorderFactory.createBevelBorder(1));
+			suggestedSupportDire[i].setBounds(new Rectangle(1030, 190 + (i+1)*55, 100, 50));
+			window.add(suggestedSupportDire[i]);
+		}
+		
+		coreLabelDire = new JLabel("кор Dire");
+//		supportLabel.setIcon(new ImageIcon("icons/support.png"));
+		coreLabelDire.setBorder(BorderFactory.createBevelBorder(1));
+		coreLabelDire.setBounds(new Rectangle(1250, 200, 60, 30));
+		window.add(coreLabelDire);
+		
+		suggestedCoreDire = new JLabel[5];
+		for(int i = 0; i < suggestedCoreDire.length; i++) {
+			suggestedCoreDire[i] = new JLabel("" + i);
+			suggestedCoreDire[i].setBorder(BorderFactory.createBevelBorder(1));
+			suggestedCoreDire[i].setBounds(new Rectangle(1230, 190 + (i+1)*55, 100, 50));
+			window.add(suggestedCoreDire[i]);
 		}
 		
 		
-		/////////////////////////////////////////// - supportLabels
-		/////////////////////////////////////////// + coreLabels
 		
-		coreLabel = new JLabel("кор");
-//		supportLabel.setIcon(new ImageIcon("icons/support.png"));
-		coreLabel.setBorder(BorderFactory.createBevelBorder(1));
-		coreLabel.setBounds(new Rectangle(450, 200, 60, 30));
-		window.add(coreLabel);
 		
-		suggestedCoreIcons = new JLabel[5];
-		for(int i = 0; i < suggestedCoreIcons.length; i++) {
-			suggestedCoreIcons[i] = new JLabel("" + i);
-			suggestedCoreIcons[i].setBorder(BorderFactory.createBevelBorder(1));
-			suggestedCoreIcons[i].setBounds(new Rectangle(430, 190 + (i+1)*55, 100, 50));
-			window.add(suggestedCoreIcons[i]);
-		}
 		
-		/////////////////////////////////////////// - coreLabels
-		/////////////////////////////////////////// + exp
 		
 		controller.init();
 		model.initPickOrder();
@@ -207,8 +227,6 @@ public class MainWindow {
 		input = "";
 		updateCandidateName();
 		updatePick();
-		
-		/////////////////////////////////////////// - exp
 		
 //		window.setUndecorated(true);
 		window.setVisible(true);
@@ -236,8 +254,7 @@ public class MainWindow {
 		app.init();
 		app.run();
 		
-//		model.getSupports().forEach((name, hero) -> {
-//			System.out.println(name + " " + hero.getRole());
-//		});
+		
+		
 	}
 }

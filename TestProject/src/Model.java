@@ -28,7 +28,6 @@ public class Model {
 	
 	private MainWindow app;
 	
-	//private String candidateName = "";
 	private Hero candidate;
 	
 	public Hero[] getPick() {
@@ -84,12 +83,12 @@ public class Model {
 		
 	}
 	
-	private void calculateAdvantage(Hero hero) {									// calculates one hero advantage over 
-		HashMap<Hero, Double> advantages = SQLUtility.getAdvantageTable(hero);
-		for(int i = 0; i < wholePick.length; i++) {
-			hero.setAdvantage(hero.getAdvantage() + );
-		}
-	}
+//	private void calculateAdvantage(Hero hero) {									// calculates one hero advantage over pick
+//		HashMap<Hero, Double> advantages = SQLUtility.getAdvantageTable(hero);
+//		for(int i = 0; i < wholePick.length; i++) {
+//			hero.setAdvantage(hero.getAdvantage() + );
+//		}
+//	}
 	
 	private ArrayList<Hero> getSupports() {			// actually returns not-cores
 		ArrayList<Hero> heroesList = new ArrayList<Hero>();
