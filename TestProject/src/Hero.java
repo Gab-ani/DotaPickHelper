@@ -42,6 +42,7 @@ public class Hero implements Comparable<Hero> {
 	
 	public void setAdvantage(double adv) {
 		advantage = adv;
+	
 	}
 	
 	public double getAdvantage() {

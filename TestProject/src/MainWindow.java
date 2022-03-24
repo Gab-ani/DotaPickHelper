@@ -154,7 +154,7 @@ public class MainWindow {
 		window.add(inputLabel);
 				
 		nextHeroSlot = new JLabel();
-		nextHeroSlot.setIcon(new ImageIcon("icons/UpSide1.png"));
+		nextHeroSlot.setIcon(new ImageIcon("resources/icons/UpSide1.png"));
 		nextHeroSlot.setBounds(new Rectangle(100, 100, 60, 70));
 		updateNextSlotLabel(0);
 		window.add(nextHeroSlot);

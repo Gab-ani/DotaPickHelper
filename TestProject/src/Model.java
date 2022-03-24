@@ -15,13 +15,14 @@ import javax.swing.ImageIcon;
 
 public class Model {
 	
+	private Hero[] wholePick;
 	private int currentIndex;
 	private int[] pickOrder;
 	
-	private Hero[] wholePick;
-	
-	private Hero[] suggestedSupports;
-	private Hero[] suggestedCores;
+	private Hero[] suggestedSupportsRadiant;						
+	private Hero[] suggestedCoresRadiant;
+	private Hero[] suggestedSupportsDire;
+	private Hero[] suggestedCoresDire;
 	
 	private ArrayList<Hero> allSupports;							// actually all non-cores
 	private ArrayList<Hero> allCores;								// actually all non-supports, some heroes have third role "both" and stored in both maps
@@ -63,8 +64,10 @@ public class Model {
 	public void initHeroBase() {
 		candidate = Hero.createUnknown();
 		
-		suggestedSupports = new Hero[5];
-		suggestedCores = new Hero[5];
+		suggestedSupportsRadiant = new Hero[5];
+		suggestedCoresRadiant = new Hero[5];
+		suggestedSupportsDire = new Hero[5];
+		suggestedCoresDire = new Hero[5];
 		
 		allCores = getCores();
 		allSupports = getSupports();
@@ -153,8 +156,8 @@ public class Model {
 	}
 	
 	public void addCandidate() throws IOException {						// sets a hero in the next in line pick slot 
-		allCores.remove(candidate.getName());
-		allSupports.remove(candidate.getName());
+		allCores.remove(candidate);
+		allSupports.remove(candidate);
 		if(currentIndex < 10 ) {
 			for(int i = 0; i < currentIndex; i++) {    					// checking if pick already has this hero
 				if(wholePick[pickOrder[i]].getName().equals(candidate.getName())) {     // to understand strange index operation see initPickOrder method below
@@ -170,8 +173,9 @@ public class Model {
 				wholePick[pickOrder[currentIndex]].setIcon(candidate.getIcon());
 				app.updatePick();
 				currentIndex++;
-				if (currentIndex < 10)
+				if (currentIndex < 10) {
 					app.updateNextSlotLabel(pickOrder[currentIndex]);
+				}
 			} else {
 				System.out.println("Предложение пустое");
 			}
