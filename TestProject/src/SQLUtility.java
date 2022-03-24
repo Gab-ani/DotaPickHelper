@@ -148,9 +148,4 @@ public class SQLUtility {
 			e.printStackTrace();
 		}
 	}
-
-	public static HashMap<Hero, Double> getAdvantageTable(Hero hero) {
-		// TODO method
-		return null;
-	}
 }

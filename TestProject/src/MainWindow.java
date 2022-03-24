@@ -234,7 +234,6 @@ public class MainWindow {
 	
 	private void run() {
 		
-		//Model.createTablesForAll();
 	}
 	
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
@@ -253,8 +252,6 @@ public class MainWindow {
 		
 		app.init();
 		app.run();
-		
-		
 		
 	}
 }

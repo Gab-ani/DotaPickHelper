@@ -93,7 +93,7 @@ public class Model {
 //		}
 //	}
 	
-	private ArrayList<Hero> getSupports() {			// actually returns not-cores
+	private ArrayList<Hero> getSupports() {			// returns list of all not-cores from DB
 		ArrayList<Hero> heroesList = new ArrayList<Hero>();
 		try {
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
@@ -101,8 +101,9 @@ public class Model {
 				Statement getHeroes = con.createStatement();
                 ResultSet heroes = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
                 while (heroes.next()) {
-                	if(!heroes.getString("role").equals("core"))
+                	if(!heroes.getString("role").equals("core")) {
                 		heroesList.add(new Hero(heroes.getString("truename"), heroes.getString("role")));
+                	}
                 }
 				
 			} finally {
@@ -114,7 +115,7 @@ public class Model {
 		return heroesList;
 	}
 	
-	private ArrayList<Hero> getCores() {				// actually returns not-supports
+	private ArrayList<Hero> getCores() {				// returns list of all not-supports from DB
 		ArrayList<Hero> heroesList = new ArrayList<>();
 		try {
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);

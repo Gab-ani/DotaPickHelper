@@ -5,15 +5,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class Hero implements Comparable<Hero> {
+	
 	private String name;
 	private ImageIcon icon;
 	private String role;
 	private double advantage;
+	private HashMap<String, Double> advantageTable;
 	
 	public Hero() {
 		
@@ -22,6 +25,8 @@ public class Hero implements Comparable<Hero> {
 	public Hero(String name, String role) {
 		this.name = name;
 		this.role = role;
+		
+		this.fetchAdvantageTable();
 	}
 	
 	public String getRole() {
@@ -68,6 +73,26 @@ public class Hero implements Comparable<Hero> {
 		res.name = "unknown";
 		res.setIcon(new ImageIcon("resources/icons/unknown.png"));
 		return res;
+	}
+	
+	private void fetchAdvantageTable() {								// Initializes advantageTable field
+		this.advantageTable = new HashMap<>();
+		try {
+            Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
+            try {
+                Statement stmt = con.createStatement();
+                ResultSet res = stmt.executeQuery("SELECT * FROM " + this.name);
+                while (res.next()) {
+                	advantageTable.put(res.getString("hero"), res.getDouble("advantage"));
+                }
+                res.close();
+                stmt.close();
+            } finally {
+                con.close();
+            }
+		} catch (Exception e) {
+            e.printStackTrace();
+        }
 	}
 	
 	public static Hero guessFromInput(String part) {
