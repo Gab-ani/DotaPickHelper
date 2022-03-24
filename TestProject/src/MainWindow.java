@@ -79,6 +79,17 @@ public class MainWindow {
 		}
 	}
 	
+	public void updateSuggestions() throws IOException {
+		
+		for(int i = 0; i < 5; i++) {
+			suggestedSupportRadiant[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.suggestedSupportsRadiant[i].getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
+			suggestedSupportDire[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.suggestedSupportsDire[i].getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));		
+			suggestedCoreDire[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.suggestedCoresDire[i].getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
+			suggestedCoreRadiant[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.suggestedCoresRadiant[i].getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
+		}
+		
+	}
+	
 	public void updateInputLabel() {
 		inputLabel.setText(input);
 	}
@@ -168,7 +179,7 @@ public class MainWindow {
 		suggestedSupportRadiant = new JLabel[5];
 		for(int i = 0; i < suggestedSupportRadiant.length; i++) {
 			suggestedSupportRadiant[i] = new JLabel("" + i);
-			suggestedSupportRadiant[i].setBorder(BorderFactory.createBevelBorder(1));
+			suggestedSupportRadiant[i].setIcon(new ImageIcon("resources/icons/unknown.png"));
 			suggestedSupportRadiant[i].setBounds(new Rectangle(180, 190 + (i+1)*55, 100, 50));
 			window.add(suggestedSupportRadiant[i]);
 		}
@@ -182,7 +193,7 @@ public class MainWindow {
 		suggestedCoreRadiant = new JLabel[5];
 		for(int i = 0; i < suggestedCoreRadiant.length; i++) {
 			suggestedCoreRadiant[i] = new JLabel("" + i);
-			suggestedCoreRadiant[i].setBorder(BorderFactory.createBevelBorder(1));
+			suggestedCoreRadiant[i].setIcon(new ImageIcon("resources/icons/unknown.png"));
 			suggestedCoreRadiant[i].setBounds(new Rectangle(380, 190 + (i+1)*55, 100, 50));
 			window.add(suggestedCoreRadiant[i]);
 		}
@@ -196,7 +207,7 @@ public class MainWindow {
 		suggestedSupportDire = new JLabel[5];
 		for(int i = 0; i < suggestedSupportDire.length; i++) {
 			suggestedSupportDire[i] = new JLabel("" + i);
-			suggestedSupportDire[i].setBorder(BorderFactory.createBevelBorder(1));
+			suggestedSupportDire[i].setIcon(new ImageIcon("resources/icons/unknown.png"));
 			suggestedSupportDire[i].setBounds(new Rectangle(1030, 190 + (i+1)*55, 100, 50));
 			window.add(suggestedSupportDire[i]);
 		}
@@ -210,7 +221,7 @@ public class MainWindow {
 		suggestedCoreDire = new JLabel[5];
 		for(int i = 0; i < suggestedCoreDire.length; i++) {
 			suggestedCoreDire[i] = new JLabel("" + i);
-			suggestedCoreDire[i].setBorder(BorderFactory.createBevelBorder(1));
+			suggestedCoreDire[i].setIcon(new ImageIcon("resources/icons/unknown.png"));
 			suggestedCoreDire[i].setBounds(new Rectangle(1230, 190 + (i+1)*55, 100, 50));
 			window.add(suggestedCoreDire[i]);
 		}

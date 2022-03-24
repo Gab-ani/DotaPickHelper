@@ -10,16 +10,23 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-public class Hero implements Comparable<Hero> {
+public class Hero implements Comparable<Hero>, Cloneable{
 	
 	private String name;
 	private ImageIcon icon;
 	private String role;
 	private double advantage;
-	private HashMap<String, Double> advantageTable;
+	public HashMap<String, Double> advantageTable;
 	
 	public Hero() {
 		
+	}
+	
+	public Hero(String name) {
+		this.name = name;
+		
+//		this.icon = new ImageIcon(ImageIO.read(new File("resources/icons/" + name + ".png")).getScaledInstance(100, 72, Image.SCALE_SMOOTH))
+		this.fetchAdvantageTable();
 	}
 	
 	public Hero(String name, String role) {
@@ -68,11 +75,21 @@ public class Hero implements Comparable<Hero> {
 		return true;
 	}
 	
-	public static Hero createUnknown() {
-		Hero res = new Hero();
+	public static Hero createUnknown() {											// creates a "blank" Hero object, which exists and could be used in methods,
+		Hero res = new Hero();														// but doesn't represent any particular hero
 		res.name = "unknown";
 		res.setIcon(new ImageIcon("resources/icons/unknown.png"));
+		res.advantageTable = new HashMap();
 		return res;
+	}
+	
+	public void calculateAdvantage(Hero[] pick) {									// calculates one hero advantage over pick
+		advantage = 0;
+		for(Hero h : pick) {
+//			System.out.println(name + " имеет преимущество над " + h.name + " в " + advantageTable.getOrDefault(h.name, 0.0) + " очков");
+			// TODO maybe other way around
+			advantage += advantageTable.getOrDefault(h.name, 0.0);				
+		}
 	}
 	
 	private void fetchAdvantageTable() {								// Initializes advantageTable field
@@ -112,6 +129,7 @@ public class Hero implements Comparable<Hero> {
 //                		System.out.println(rs.getString("truename"));
                 		ImageIcon i = new ImageIcon(ImageIO.read(new File("resources/icons/" + res.name + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH));
                 		res.icon = i;
+                		res.fetchAdvantageTable();
                 	}
                 }
                 rs.close();
@@ -125,7 +143,11 @@ public class Hero implements Comparable<Hero> {
 //		System.out.println("вернули нуль");
 		return res;
 	}
-
+	
+	public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+	
 	@Override
 	public int compareTo(Hero h) {
 		if(advantage < h.advantage)

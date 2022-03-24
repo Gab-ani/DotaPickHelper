@@ -53,7 +53,7 @@ public class Controller {
 				if(e.getKeyChar() == (KeyEvent.VK_ENTER)) {
 					try {
 						logic.addCandidate();
-					} catch (IOException e1) {
+					} catch (IOException | CloneNotSupportedException e1) {
 						e1.printStackTrace();
 					}
 					logic.setCandidate(Hero.createUnknown());

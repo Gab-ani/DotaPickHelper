@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -19,10 +20,10 @@ public class Model {
 	private int currentIndex;
 	private int[] pickOrder;
 	
-	private Hero[] suggestedSupportsRadiant;						
-	private Hero[] suggestedCoresRadiant;
-	private Hero[] suggestedSupportsDire;
-	private Hero[] suggestedCoresDire;
+	public Hero[] suggestedSupportsRadiant;						// these are model-part of 20 suggested labels in MainWindow, 
+	public Hero[] suggestedCoresRadiant;							// they will store top 5 of sorted out heroes from allSupports and allCores
+	public Hero[] suggestedSupportsDire;
+	public Hero[] suggestedCoresDire;
 	
 	private ArrayList<Hero> allSupports;							// actually all non-cores
 	private ArrayList<Hero> allCores;								// actually all non-supports, some heroes have third role "both" and stored in both maps
@@ -80,18 +81,33 @@ public class Model {
 		}
 	}
 	
-	public void updateSuggestions() {
+	public void updateSuggestions() throws IOException {
 		
+		allSupports.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 0, 5)));
+		allCores.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 0, 5)));
 		
+		allSupports.sort(null);
+		allCores.sort(null);
+		
+		for(int i = 0; i < 5; i++) {
+			suggestedSupportsDire[i] = allSupports.get(allSupports.size() - i - 1);
+			suggestedCoresDire[i] = allCores.get(allCores.size() - i - 1);
+		}
+		
+		allSupports.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 5, 10)));
+		allCores.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 5, 10)));
+		
+		allSupports.sort(null);
+		allCores.sort(null);
+		
+		for(int i = 0; i < 5; i++) {
+			suggestedSupportsRadiant[i] = allSupports.get(allSupports.size() - i - 1);
+			suggestedCoresRadiant[i] = allCores.get(allCores.size() - i - 1);
+		}
+		
+		app.updateSuggestions();
 		
 	}
-	
-//	private void calculateAdvantage(Hero hero) {									// calculates one hero advantage over pick
-//		HashMap<Hero, Double> advantages = SQLUtility.getAdvantageTable(hero);
-//		for(int i = 0; i < wholePick.length; i++) {
-//			hero.setAdvantage(hero.getAdvantage() + );
-//		}
-//	}
 	
 	private ArrayList<Hero> getSupports() {			// returns list of all not-cores from DB
 		ArrayList<Hero> heroesList = new ArrayList<Hero>();
@@ -101,11 +117,9 @@ public class Model {
 				Statement getHeroes = con.createStatement();
                 ResultSet heroes = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
                 while (heroes.next()) {
-                	if(!heroes.getString("role").equals("core")) {
+                	if(!heroes.getString("role").equals("core"))
                 		heroesList.add(new Hero(heroes.getString("truename"), heroes.getString("role")));
-                	}
                 }
-				
 			} finally {
 				con.close();
 			}
@@ -126,7 +140,6 @@ public class Model {
                 	if(!heroes.getString("role").equals("supp"))
                 		heroesList.add(new Hero(heroes.getString("truename"), heroes.getString("role")));
                 }
-				
 			} finally {
 				con.close();
 			}
@@ -156,11 +169,11 @@ public class Model {
 		return heroesList;
 	}
 	
-	public void addCandidate() throws IOException {						// sets a hero in the next in line pick slot 
+	public void addCandidate() throws IOException, CloneNotSupportedException {						// sets a hero in the next-in-line pick slot 
 		allCores.remove(candidate);
 		allSupports.remove(candidate);
 		if(currentIndex < 10 ) {
-			for(int i = 0; i < currentIndex; i++) {    					// checking if pick already has this hero
+			for(int i = 0; i < currentIndex; i++) {    								// checking if pick already has this hero
 				if(wholePick[pickOrder[i]].getName().equals(candidate.getName())) {     // to understand strange index operation see initPickOrder method below
 					System.out.println("дубль геро€");
 					return;
@@ -168,15 +181,19 @@ public class Model {
 			}
 			if(getCandidateName() != "unknown") {
 				System.out.println("добавили " + candidate.getName());
-				wholePick[pickOrder[currentIndex]] = new Hero();						// to understand strange index operation see initPickOrder method below
-				wholePick[pickOrder[currentIndex]].setName(candidate.getName());
-//				System.out.println(candidate.getIcon());
+				wholePick[pickOrder[currentIndex]] = new Hero(candidate.getName());		// to understand strange index operation see initPickOrder method below
 				wholePick[pickOrder[currentIndex]].setIcon(candidate.getIcon());
+				
+//				for(int i = 0; i < 10; i++) {
+//					System.out.println(wholePick[i].advantageTable.toString());
+//				}
+				
 				app.updatePick();
 				currentIndex++;
 				if (currentIndex < 10) {
 					app.updateNextSlotLabel(pickOrder[currentIndex]);
 				}
+				updateSuggestions();
 			} else {
 				System.out.println("ѕредложение пустое");
 			}
