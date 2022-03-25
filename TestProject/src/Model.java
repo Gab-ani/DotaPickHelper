@@ -104,7 +104,7 @@ public class Model {
 			suggestedSupportsRadiant[i] = allSupports.get(allSupports.size() - i - 1);
 			suggestedCoresRadiant[i] = allCores.get(allCores.size() - i - 1);
 		}
-		
+	
 		app.updateSuggestions();
 		
 	}
