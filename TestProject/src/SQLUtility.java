@@ -1,15 +1,9 @@
-import java.awt.Image;
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.HashMap;
 import java.util.Scanner;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 public class SQLUtility {
 	

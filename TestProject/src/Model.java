@@ -1,6 +1,3 @@
-import java.awt.Image;
-import java.awt.image.RenderedImage;
-import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,11 +5,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Scanner;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 public class Model {
 	
@@ -140,26 +132,6 @@ public class Model {
                 	if(!heroes.getString("role").equals("supp"))
                 		heroesList.add(new Hero(heroes.getString("truename"), heroes.getString("role")));
                 }
-			} finally {
-				con.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return heroesList;
-	}
-	
-	private ArrayList<Hero> getAllHeroes() {			// isn't used anywhere, but not having it is very strange considering getCores() and getSupport() exist
-		ArrayList<Hero> heroesList = new ArrayList<>();
-		try {
-			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
-			try {
-				Statement getHeroes = con.createStatement();
-                ResultSet heroes = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
-                while (heroes.next()) {
-                	heroesList.add(new Hero(heroes.getString("truename"), heroes.getString("role")));
-                }
-				
 			} finally {
 				con.close();
 			}

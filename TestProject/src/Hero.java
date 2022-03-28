@@ -1,5 +1,4 @@
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,7 +9,7 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-public class Hero implements Comparable<Hero>, Cloneable{
+public class Hero implements Comparable<Hero>, Cloneable {
 	
 	private String name;
 	private ImageIcon icon;
@@ -24,7 +23,6 @@ public class Hero implements Comparable<Hero>, Cloneable{
 	
 	public Hero(String name) {
 		this.name = name;
-		
 //		this.icon = new ImageIcon(ImageIO.read(new File("resources/icons/" + name + ".png")).getScaledInstance(100, 72, Image.SCALE_SMOOTH))
 		this.fetchAdvantageTable();
 	}
@@ -52,11 +50,6 @@ public class Hero implements Comparable<Hero>, Cloneable{
 		name = n;
 	}
 	
-	public void setAdvantage(double adv) {
-		advantage = adv;
-	
-	}
-	
 	public double getAdvantage() {
 		return this.advantage;
 	}
@@ -79,7 +72,7 @@ public class Hero implements Comparable<Hero>, Cloneable{
 		Hero res = new Hero();														// but doesn't represent any particular hero
 		res.name = "unknown";
 		res.setIcon(new ImageIcon("resources/icons/unknown.png"));
-		res.advantageTable = new HashMap();
+		res.advantageTable = new HashMap<String, Double>();
 		return res;
 	}
 	
@@ -115,38 +108,35 @@ public class Hero implements Comparable<Hero>, Cloneable{
 	public static Hero guessFromInput(String part) {
 		Hero res = Hero.createUnknown();
 		try {
-            String url = SQLUtility.baseURL;
-            String login = SQLUtility.login;
-            String password = SQLUtility.password;
-            Connection con = DriverManager.getConnection(url, login, password);
-            try {
-                Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM TRUENAMES");
-                while (rs.next()) {
-                	if(compareWithInput(part, rs.getString("jargon"))) {
-                		res = new Hero();
-                		res.name = rs.getString("truename");
+			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
+			try {
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery("SELECT * FROM TRUENAMES");
+				while (rs.next()) {
+					if(compareWithInput(part, rs.getString("jargon"))) {
+						res = new Hero();
+						res.name = rs.getString("truename");
 //                		System.out.println(rs.getString("truename"));
-                		ImageIcon i = new ImageIcon(ImageIO.read(new File("resources/icons/" + res.name + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH));
+						ImageIcon i = new ImageIcon(ImageIO.read(new File("resources/icons/" + res.name + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH));
                 		res.icon = i;
                 		res.fetchAdvantageTable();
-                	}
-                }
-                rs.close();
-                stmt.close();
-            } finally {
-                con.close();
-            }
+					}
+				}
+				rs.close();
+				stmt.close();
+			} finally {
+				con.close();
+			}
 		} catch (Exception e) {
-            e.printStackTrace();
-        }
+			e.printStackTrace();
+		}
 //		System.out.println("вернули нуль");
 		return res;
 	}
 	
 	public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
+		return super.clone();
+	}
 	
 	@Override
 	public int compareTo(Hero h) {

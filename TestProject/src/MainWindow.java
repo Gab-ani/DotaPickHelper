@@ -1,35 +1,14 @@
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Image;
-import java.awt.LayoutManager;
-import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.Collection;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.border.Border;
 
 public class MainWindow {
 	
@@ -80,14 +59,12 @@ public class MainWindow {
 	}
 	
 	public void updateSuggestions() throws IOException {
-		
 		for(int i = 0; i < 5; i++) {
 			suggestedSupportRadiant[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.suggestedSupportsRadiant[i].getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
 			suggestedSupportDire[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.suggestedSupportsDire[i].getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));		
 			suggestedCoreDire[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.suggestedCoresDire[i].getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
 			suggestedCoreRadiant[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.suggestedCoresRadiant[i].getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
 		}
-		
 	}
 	
 	public void updateInputLabel() {
@@ -131,7 +108,7 @@ public class MainWindow {
 		controller = c;
 	}
 	
-	private void init() throws IOException {
+	private void setupWindow() throws IOException {
 		
 		JFrame window = new JFrame("Dota2Picker");
 		window.setBounds(new Rectangle(0, 0, windowWidth, windowHeight));
@@ -154,7 +131,7 @@ public class MainWindow {
 		}
 		
 		candidateLabel = new JButton();
-		candidateLabel.setBounds(new Rectangle(window.getWidth() / 2 - candIconWidth / 2, window.getHeight() / 2 - candIconHeight / 2 - 50, candIconWidth, candIconHeight));
+		candidateLabel.setBounds(new Rectangle(window.getWidth() / 2 - candIconWidth / 2, window.getHeight() / 2 - candIconHeight / 2 - 30, candIconWidth, candIconHeight));
 		window.add(candidateLabel);
 		
 		inputLabel = new JLabel();
@@ -261,7 +238,7 @@ public class MainWindow {
 		
 		app.model.setApp(app);
 		
-		app.init();
+		app.setupWindow();
 		app.run();
 		
 	}
