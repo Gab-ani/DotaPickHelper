@@ -2,6 +2,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -220,11 +221,11 @@ public class MainWindow {
 		window.setVisible(true);
 	}
 	
-	private void run() {
-		
+	private void run() throws IOException, ParseException {
+		dataFetcher.fetchAdvantageTable("https://ru.dotabuff.com/heroes/morphling/counters");
 	}
 	
-	public static void main(String[] args) throws IOException, ClassNotFoundException {
+	public static void main(String[] args) throws IOException, ClassNotFoundException, ParseException {
 		
 		Model model = new Model();
 		MainWindow app = new MainWindow();

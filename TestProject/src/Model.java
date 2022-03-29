@@ -155,11 +155,6 @@ public class Model {
 				System.out.println("добавили " + candidate.getName());
 				wholePick[pickOrder[currentIndex]] = new Hero(candidate.getName());		// to understand strange index operation see initPickOrder method below
 				wholePick[pickOrder[currentIndex]].setIcon(candidate.getIcon());
-				
-//				for(int i = 0; i < 10; i++) {
-//					System.out.println(wholePick[i].advantageTable.toString());
-//				}
-				
 				app.updatePick();
 				currentIndex++;
 				if (currentIndex < 10) {

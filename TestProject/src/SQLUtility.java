@@ -61,7 +61,7 @@ public class SQLUtility {
                 while (heroesList.next()) {
                 	System.out.println(heroesList.getString("truename"));
                 	Statement createTable = con.createStatement();
-                	try {                
+                	try {
                 		System.out.println("create table " + heroesList.getString("truename") + " ( hero text, advantage real )");
                     	createTable.executeQuery("create table " + heroesList.getString("truename") + " ( hero text, advantage real )");
                 	} catch (Exception e) {
@@ -79,6 +79,12 @@ public class SQLUtility {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void createDatabase() {
+		
+		
+		
 	}
 	
 	public static void advantageSetProcess() {          // TODO spirit breaker
