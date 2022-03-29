@@ -3,6 +3,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class SQLUtility {
@@ -51,25 +52,29 @@ public class SQLUtility {
 		scan.close();
 	}
 	
-	public static void initAdvantageTables() throws ClassNotFoundException {				// this intended to be used once in a lifetime to create a batch of empty tables,
-		Class.forName(SQLUtility.driver);													// a table for every unique name in truenames table (read for every hero in dota2),
-		try {																				// those tables will contain data about heroes counterpicks
+	public static void createAdvantageTables() {
+		
+		try {
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
 			try {
                 Statement getHeroes = con.createStatement();
                 ResultSet heroesList = getHeroes.executeQuery("select distinct truename from truenames order by truename asc");
                 while (heroesList.next()) {
+                	long tStart = System.currentTimeMillis();
                 	System.out.println(heroesList.getString("truename"));
+                	
+                	Statement dropTable = con.createStatement();
+                	dropTable.executeUpdate("drop table if exists " + heroesList.getString("truename"));
+                	dropTable.close();
+                	
                 	Statement createTable = con.createStatement();
-                	try {
-                		System.out.println("create table " + heroesList.getString("truename") + " ( hero text, advantage real )");
-                    	createTable.executeQuery("create table " + heroesList.getString("truename") + " ( hero text, advantage real )");
-                	} catch (Exception e) {
-                		//e.printStackTrace();
-                		System.out.println("no return information");                        // always procs exception because query didn't return anything.
-                		//createTable.close();												// I don't know how to escape this, so just ignoring it - tables are created anyway
-                    }
-                	createTable.close();
+                	String table = heroesList.getString("truename");
+                	createTable.executeUpdate("create table if not exists " + table + " ( hero text, advantage real )");
+                    String url = String.format("https://ru.dotabuff.com/heroes/%s/counters", Model.toDotabuffNamingRules(heroesList.getString("truename")));
+                    HashMap<String, Double> advantageTable = dataFetcher.fetchAdvantageTable(url);
+                    advantageTable.forEach((hero, advantage) -> addAdvantageString(table, createTable, hero, advantage));
+                    createTable.close();
+                    System.out.println(System.currentTimeMillis() - tStart);
                 }
                 heroesList.close();
                 getHeroes.close();
@@ -79,57 +84,15 @@ public class SQLUtility {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public static void createDatabase() {
-		
-		
 		
 	}
 	
-	public static void advantageSetProcess() {          // TODO spirit breaker
-		System.out.println("введите truename для героя");
-		Scanner scan = new Scanner(System.in);
-		String inputName = scan.nextLine();
-		if(!tableExists(inputName)) {
-			System.out.println("герой не найден");
-			scan.close();
-			return;
-		}
+	private static void addAdvantageString(String intoTable, Statement insert, String heroName, double advantage) {
 		try {
-			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
-			try {
-				for(int i = 0; i < 10; i++) {
-					String name = scan.next();
-					double advantage = scan.nextDouble();
-					Statement update = con.createStatement();
-					update.executeUpdate("INSERT INTO " + inputName + " VALUES ('" + name + "', " + advantage + ")");
-				}
-			} finally {
-				con.close();
-			}
+			insert.executeUpdate("INSERT INTO " + intoTable + " VALUES ('" + heroName + "', " + advantage + ")");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		scan.close();
-	}
-	
-	private static boolean tableExists(String name) {
-		try {
-			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
-			try {
-				Statement checkTable = con.createStatement();
-				ResultSet checkResults = checkTable.executeQuery("SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='" + name + "'");
-				if(checkResults.next()) {
-					return true;
-				}
-			} finally {
-				con.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
 	}
 	
 	private static void insertTruenamePair(String jargon, String truename) {					// adds a new jargon-truename relation in the DB

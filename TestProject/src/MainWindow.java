@@ -222,7 +222,9 @@ public class MainWindow {
 	}
 	
 	private void run() throws IOException, ParseException {
-		dataFetcher.fetchAdvantageTable("https://ru.dotabuff.com/heroes/morphling/counters");
+		//dataFetcher.fetchAdvantageTable("https://ru.dotabuff.com/heroes/morphling/counters");
+//		System.out.println(model.toNamingRules("anti-mage"));
+		System.out.println(String.format("https://ru.dotabuff.com/heroes/%s/counters", "natures-prophet"));
 	}
 	
 	public static void main(String[] args) throws IOException, ClassNotFoundException, ParseException {
@@ -239,6 +241,7 @@ public class MainWindow {
 		
 		app.model.setApp(app);
 		
+//		SQLUtility.createAdvantageTables();
 		app.setupWindow();
 		app.run();
 		

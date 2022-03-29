@@ -167,6 +167,19 @@ public class Model {
 		}
 	}
 	
+	public static String toDotabuffNamingRules(String name) {	// util method, mades a string to to match web address on dotabuff
+		name = name.replaceAll("[_]", "-");
+		return name;
+	}
+	
+	public static String toDBNamingRules(String name) {	// util method, mades a string to to match naming rules in the DB
+		name = name.replaceAll("[-]", "");
+		name = name.replaceAll("[']", "");
+		name = name.replaceAll("[ ]", "_");
+		name = name.toLowerCase();
+		return name;
+	}
+	
 	public void initPickOrder() {
 		currentIndex = 0;
 		pickOrder = new int[] {0,1,5,6,2,3,7,8,4,9};   	// these are indexes for wholePick massive to add into, scheme is 2r-2d-2r-2d-1r-1d (Dota2 pub 2022y)
