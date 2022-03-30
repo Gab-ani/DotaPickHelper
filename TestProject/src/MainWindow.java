@@ -61,10 +61,12 @@ public class MainWindow {
 	
 	public void updateSuggestions() throws IOException {
 		for(int i = 0; i < 5; i++) {
-			suggestedSupportRadiant[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.suggestedSupportsRadiant[i].getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
-			suggestedSupportDire[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.suggestedSupportsDire[i].getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));		
-			suggestedCoreDire[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.suggestedCoresDire[i].getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
-			suggestedCoreRadiant[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.suggestedCoresRadiant[i].getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
+			if(!model.getPick()[5].getName().equals("unknown")) {	// checks if dire pick is even initialized right now and blocks radiant recommendations from appear
+				suggestedSupportRadiant[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.radiantSupports.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
+				suggestedCoreRadiant[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.radiantCores.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
+			}
+			suggestedSupportDire[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.direSupports.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));		
+			suggestedCoreDire[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.direCores.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
 		}
 	}
 	
@@ -222,9 +224,7 @@ public class MainWindow {
 	}
 	
 	private void run() throws IOException, ParseException {
-		//dataFetcher.fetchAdvantageTable("https://ru.dotabuff.com/heroes/morphling/counters");
-//		System.out.println(model.toNamingRules("anti-mage"));
-		System.out.println(String.format("https://ru.dotabuff.com/heroes/%s/counters", "natures-prophet"));
+		//model.direCores.forEach(hero -> System.out.println(hero.getAdvantage()));
 	}
 	
 	public static void main(String[] args) throws IOException, ClassNotFoundException, ParseException {

@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class Model {
 	
@@ -12,13 +13,18 @@ public class Model {
 	private int currentIndex;
 	private int[] pickOrder;
 	
-	public Hero[] suggestedSupportsRadiant;						// these are model-part of 20 suggested labels in MainWindow, 
-	public Hero[] suggestedCoresRadiant;							// they will store top 5 of sorted out heroes from allSupports and allCores
-	public Hero[] suggestedSupportsDire;
-	public Hero[] suggestedCoresDire;
+//	public Hero[] goodSupportsRadiant;						// these are model-part of 20 suggested labels in MainWindow, 
+//	public Hero[] goodCoresRadiant;							// they will store top 5 of sorted out heroes from allSupports and allCores
+//	public Hero[] goodSupportsDire;
+//	public Hero[] goodCoresDire;
+//	
+//	private ArrayList<Hero> allSupports ;							// actually all non-cores
+//	private ArrayList<Hero> allCores;								// actually all non-supports, some heroes have third role "both" and stored in both maps
 	
-	private ArrayList<Hero> allSupports;							// actually all non-cores
-	private ArrayList<Hero> allCores;								// actually all non-supports, some heroes have third role "both" and stored in both maps
+	public ArrayList<Hero> radiantSupports;
+	public ArrayList<Hero> radiantCores;
+	public ArrayList<Hero> direSupports;
+	public ArrayList<Hero> direCores;
 	
 	private MainWindow app;
 	
@@ -57,13 +63,18 @@ public class Model {
 	public void initHeroBase() {
 		candidate = Hero.createUnknown();
 		
-		suggestedSupportsRadiant = new Hero[5];
-		suggestedCoresRadiant = new Hero[5];
-		suggestedSupportsDire = new Hero[5];
-		suggestedCoresDire = new Hero[5];
+		radiantSupports = getSupports();
+		radiantCores = getCores();
+		direSupports = getSupports();
+		direCores = getCores();
 		
-		allCores = getCores();
-		allSupports = getSupports();
+//		goodSupportsRadiant = new Hero[5];
+//		goodCoresRadiant = new Hero[5];
+//		goodSupportsDire = new Hero[5];
+//		goodCoresDire = new Hero[5];
+//		
+//		allCores = getCores();
+//		allSupports = getSupports();
 	}
 	
 	public void initTeams() {
@@ -74,31 +85,21 @@ public class Model {
 	}
 	
 	public void updateSuggestions() throws IOException {
-		
-		allSupports.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 0, 5)));
-		allCores.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 0, 5)));
-		
-		allSupports.sort(null);
-		allCores.sort(null);
-		
-		for(int i = 0; i < 5; i++) {
-			suggestedSupportsDire[i] = allSupports.get(allSupports.size() - i - 1);
-			suggestedCoresDire[i] = allCores.get(allCores.size() - i - 1);
-		}
-		
-		allSupports.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 5, 10)));
-		allCores.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 5, 10)));
-		
-		allSupports.sort(null);
-		allCores.sort(null);
-		
-		for(int i = 0; i < 5; i++) {
-			suggestedSupportsRadiant[i] = allSupports.get(allSupports.size() - i - 1);
-			suggestedCoresRadiant[i] = allCores.get(allCores.size() - i - 1);
-		}
 	
-		app.updateSuggestions();
-		
+	direCores.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 0, 5)));
+	direSupports.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 0, 5)));
+	radiantCores.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 5, 10)));
+	radiantSupports.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 5, 10)));
+
+	direCores.sort(null);
+	Collections.reverse(direCores);
+	direSupports.sort(null);
+	Collections.reverse(direSupports);
+	radiantCores.sort(null);
+	Collections.reverse(radiantCores);
+	radiantSupports.sort(null);
+	Collections.reverse(radiantSupports);
+	app.updateSuggestions();
 	}
 	
 	private ArrayList<Hero> getSupports() {			// returns list of all not-cores from DB
@@ -142,8 +143,9 @@ public class Model {
 	}
 	
 	public void addCandidate() throws IOException, CloneNotSupportedException {						// sets a hero in the next-in-line pick slot 
-		allCores.remove(candidate);
-		allSupports.remove(candidate);
+
+		//TODO remove candidate hero from suggestion collections
+		
 		if(currentIndex < 10 ) {
 			for(int i = 0; i < currentIndex; i++) {    								// checking if pick already has this hero
 				if(wholePick[pickOrder[i]].getName().equals(candidate.getName())) {     // to understand strange index operation see initPickOrder method below
@@ -156,11 +158,11 @@ public class Model {
 				wholePick[pickOrder[currentIndex]] = new Hero(candidate.getName());		// to understand strange index operation see initPickOrder method below
 				wholePick[pickOrder[currentIndex]].setIcon(candidate.getIcon());
 				app.updatePick();
+				updateSuggestions();
 				currentIndex++;
 				if (currentIndex < 10) {
 					app.updateNextSlotLabel(pickOrder[currentIndex]);
 				}
-				updateSuggestions();
 			} else {
 				System.out.println("Предложение пустое");
 			}

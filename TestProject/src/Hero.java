@@ -14,7 +14,7 @@ public class Hero implements Comparable<Hero>, Cloneable {
 	private String name;
 	private ImageIcon icon;
 	private String role;
-	private double advantage;
+	public double advantage;
 	public HashMap<String, Double> advantageTable;
 	
 	public Hero() {
