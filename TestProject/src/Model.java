@@ -13,14 +13,6 @@ public class Model {
 	private int currentIndex;
 	private int[] pickOrder;
 	
-//	public Hero[] goodSupportsRadiant;						// these are model-part of 20 suggested labels in MainWindow, 
-//	public Hero[] goodCoresRadiant;							// they will store top 5 of sorted out heroes from allSupports and allCores
-//	public Hero[] goodSupportsDire;
-//	public Hero[] goodCoresDire;
-//	
-//	private ArrayList<Hero> allSupports ;							// actually all non-cores
-//	private ArrayList<Hero> allCores;								// actually all non-supports, some heroes have third role "both" and stored in both maps
-	
 	public ArrayList<Hero> radiantSupports;
 	public ArrayList<Hero> radiantCores;
 	public ArrayList<Hero> direSupports;
@@ -67,14 +59,6 @@ public class Model {
 		radiantCores = getCores();
 		direSupports = getSupports();
 		direCores = getCores();
-		
-//		goodSupportsRadiant = new Hero[5];
-//		goodCoresRadiant = new Hero[5];
-//		goodSupportsDire = new Hero[5];
-//		goodCoresDire = new Hero[5];
-//		
-//		allCores = getCores();
-//		allSupports = getSupports();
 	}
 	
 	public void initTeams() {

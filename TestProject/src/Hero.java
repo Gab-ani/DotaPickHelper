@@ -23,7 +23,6 @@ public class Hero implements Comparable<Hero>, Cloneable {
 	
 	public Hero(String name) {
 		this.name = name;
-//		this.icon = new ImageIcon(ImageIO.read(new File("resources/icons/" + name + ".png")).getScaledInstance(100, 72, Image.SCALE_SMOOTH))
 		this.fetchAdvantageTable();
 	}
 	
@@ -79,7 +78,6 @@ public class Hero implements Comparable<Hero>, Cloneable {
 	public void calculateAdvantage(Hero[] pick) {									// calculates one hero advantage over pick
 		advantage = 0;
 		for(Hero h : pick) {
-//			System.out.println(name + " имеет преимущество над " + h.name + " в " + advantageTable.getOrDefault(h.name, 0.0) + " очков");
 			// TODO maybe other way around
 			advantage += advantageTable.getOrDefault(h.name, 0.0);				
 		}
@@ -130,7 +128,6 @@ public class Hero implements Comparable<Hero>, Cloneable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-//		System.out.println("вернули нуль");
 		return res;
 	}
 	
