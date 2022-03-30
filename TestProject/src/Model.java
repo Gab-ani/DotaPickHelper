@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 
 public class Model {
@@ -128,8 +129,10 @@ public class Model {
 	
 	public void addCandidate() throws IOException, CloneNotSupportedException {						// sets a hero in the next-in-line pick slot 
 
-		//TODO remove candidate hero from suggestion collections
-		
+		removeByName(radiantCores, candidate.getName());
+		removeByName(radiantSupports, candidate.getName());
+		removeByName(direCores, candidate.getName());
+		removeByName(direSupports, candidate.getName());
 		if(currentIndex < 10 ) {
 			for(int i = 0; i < currentIndex; i++) {    								// checking if pick already has this hero
 				if(wholePick[pickOrder[i]].getName().equals(candidate.getName())) {     // to understand strange index operation see initPickOrder method below
@@ -164,6 +167,14 @@ public class Model {
 		name = name.replaceAll("[ ]", "_");
 		name = name.toLowerCase();
 		return name;
+	}
+	
+	private void removeByName(ArrayList<Hero> col, String name) {
+		for(int i = 0; i < col.size(); i++) {
+			if (col.get(i).getName().equals(name)) {
+				col.remove(i);
+			}
+		}
 	}
 	
 	public void initPickOrder() {
