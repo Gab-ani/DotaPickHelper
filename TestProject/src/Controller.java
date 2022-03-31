@@ -5,9 +5,9 @@ import java.io.IOException;
 public class Controller {
 	
 	private Model logic;
-	private MainWindow app;
+	private View app;
 	
-	public void setApp(MainWindow w) {
+	public void setApp(View w) {
 		app = w;
 	}
 	
@@ -15,7 +15,7 @@ public class Controller {
 		logic = m;
 	}
 	
-	public MainWindow getApp() {
+	public View getApp() {
 		return app;
 	}
 	
@@ -24,7 +24,7 @@ public class Controller {
 	}
 	
 	public void init() {
-		app.getCandidateLabel().addKeyListener(new KeyListener() {
+		app.mainWindow.getCandidateLabel().addKeyListener(new KeyListener() {
 			@Override
             public void keyReleased(KeyEvent event) {
             }
@@ -32,22 +32,22 @@ public class Controller {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				if(Character.isLetter(e.getKeyChar()) || e.getKeyChar() == KeyEvent.VK_SPACE) {
-					app.setInput( app.getInput() + e.getKeyChar() );
-					logic.guessCandidate(app.getInput());
+					app.mainWindow.setInput( app.mainWindow.getInput() + e.getKeyChar() );
+					logic.guessCandidate(app.mainWindow.getInput());
 					return;
 				}
 				if(e.getKeyChar() == (KeyEvent.VK_BACK_SPACE)) {
-					if(app.getInput().length() > 0) {
-						app.setInput( app.getInput().substring( 0, app.getInput().length()-1 ) );
-						if(app.getInput().length() != 0)
-							logic.guessCandidate(app.getInput());
+					if(app.mainWindow.getInput().length() > 0) {
+						app.mainWindow.setInput( app.mainWindow.getInput().substring( 0, app.mainWindow.getInput().length()-1 ) );
+						if(app.mainWindow.getInput().length() != 0)
+							logic.guessCandidate(app.mainWindow.getInput());
 						return;
 					}
 				}
 				if(e.getKeyChar() == (KeyEvent.VK_DELETE)) {
-					app.setInput("");
+					app.mainWindow.setInput("");
 					logic.setCandidate(Hero.createUnknown());
-					app.updateCandidateName();
+					app.mainWindow.updateCandidateName();
 					return;
 				}
 				if(e.getKeyChar() == (KeyEvent.VK_ENTER)) {
@@ -57,7 +57,7 @@ public class Controller {
 						e1.printStackTrace();
 					}
 					logic.setCandidate(Hero.createUnknown());
-					app.setInput("");
+					app.mainWindow.setInput("");
 					return;
 				}
 			}

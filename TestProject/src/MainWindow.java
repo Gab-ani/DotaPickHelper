@@ -2,7 +2,6 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -12,7 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class MainWindow {
-	
+
 	final static int windowWidth = 1500;
 	final static int windowHeight = 600;   			// global window
 	
@@ -25,10 +24,10 @@ public class MainWindow {
 	final static int candIconWidth = 256;			// central icon
 	final static int candIconHeight = 144;
 	
-	final static Rectangle textRect = new Rectangle(windowWidth / 2 - 145, windowHeight / 2 + 75, 290, 150);
+	final static Rectangle textRect = new Rectangle(windowWidth / 2 - 145, windowHeight / 2 + 75, 290, 100);
+	final static Rectangle exitRectangle = new Rectangle(windowWidth / 2 - 170, windowHeight / 2 - 30, 50, 30);
 	
-	Controller controller;
-	Model model;
+	public View fatherView;
 	
 	private JLabel[] pickIcons;
 	
@@ -49,24 +48,29 @@ public class MainWindow {
 	private JLabel supportLabelDire;
 	private JLabel coreLabelDire;
 	
+	private JButton resetButton;
+	private JButton settingsButton;
+	private JButton exitButton;
+	private JButton infoButton;
+	
 	public void updateNextSlotLabel(int index) {
 		nextHeroSlot.setLocation(pickIcons[index].getLocation().x + heroIconWidth / 2 - nextHeroSlot.getWidth() / 2, pickIcons[index].getLocation().y + heroIconHeight + 10);
 	}
 	
 	public void updatePick() throws IOException {
 		for(int i = 0; i < 10; i++) {
-			pickIcons[i].setIcon(model.getPick()[i].getIcon());
+			pickIcons[i].setIcon(fatherView.model.getPick()[i].getIcon());
 		}
 	}
 	
 	public void updateSuggestions() throws IOException {
 		for(int i = 0; i < 5; i++) {
-			if(!model.getPick()[5].getName().equals("unknown")) {	// checks if dire pick is even initialized right now and blocks radiant recommendations from appear
-				suggestedSupportRadiant[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.radiantSupports.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
-				suggestedCoreRadiant[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.radiantCores.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
+			if(!fatherView.model.getPick()[5].getName().equals("unknown")) {	// checks if dire pick is even initialized right now and blocks radiant recommendations from appear
+				suggestedSupportRadiant[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + fatherView.model.radiantSupports.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
+				suggestedCoreRadiant[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + fatherView.model.radiantCores.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
 			}
-			suggestedSupportDire[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.direSupports.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));		
-			suggestedCoreDire[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + model.direCores.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
+			suggestedSupportDire[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + fatherView.model.direSupports.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));		
+			suggestedCoreDire[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + fatherView.model.direCores.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
 		}
 	}
 	
@@ -75,7 +79,7 @@ public class MainWindow {
 	}
 	
 	public void updateCandidateName() {
-		ImageIcon icon = new ImageIcon("resources/icons/" + model.getCandidate().getName() + ".png");
+		ImageIcon icon = new ImageIcon("resources/icons/" + fatherView.model.getCandidate().getName() + ".png");
 		Image imageToRescale = icon.getImage().getScaledInstance(256, 144, Image.SCALE_SMOOTH);
 		icon = new ImageIcon(imageToRescale);
 		//ImageIcon i = model.getCandidate().getIcon();
@@ -98,20 +102,16 @@ public class MainWindow {
 		return pickIcons;
 	}
 	
+	public void setView(View v) {
+		fatherView = v;
+	}
+	
 	public void setInput(String s) {
 		input = s;
 		updateInputLabel();
 	}
 	
-	public void setModel(Model m) {
-		model = m;
-	}
-	
-	public void setController(Controller c) {
-		controller = c;
-	}
-	
-	private void setupWindow() throws IOException {
+	public void setupWindow() throws IOException {
 		
 		JFrame window = new JFrame("Dota2Picker");
 		window.setBounds(new Rectangle(0, 0, windowWidth, windowHeight));
@@ -206,15 +206,10 @@ public class MainWindow {
 			window.add(suggestedCoreDire[i]);
 		}
 		
+		exitButton = new JButton();
+		exitButton.setBounds(exitRectangle);
+		window.add(exitButton);
 		
-		
-		
-		
-		
-		controller.init();
-		model.initPickOrder();
-		model.initTeams();
-		model.initHeroBase();
 		input = "";
 		updateCandidateName();
 		updatePick();
@@ -223,27 +218,4 @@ public class MainWindow {
 		window.setVisible(true);
 	}
 	
-	private void run() throws IOException, ParseException {
-		//model.direCores.forEach(hero -> System.out.println(hero.getAdvantage()));
-	}
-	
-	public static void main(String[] args) throws IOException, ClassNotFoundException, ParseException {
-		
-		Model model = new Model();
-		MainWindow app = new MainWindow();
-		Controller ctrl = new Controller();
-		
-		app.setController(ctrl);
-		app.setModel(model);
-		
-		app.controller.setApp(app);
-		app.controller.setModel(model);
-		
-		app.model.setApp(app);
-		
-//		SQLUtility.createAdvantageTables();
-		app.setupWindow();
-		app.run();
-		
-	}
 }

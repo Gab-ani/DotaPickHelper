@@ -19,7 +19,7 @@ public class Model {
 	public ArrayList<Hero> direSupports;
 	public ArrayList<Hero> direCores;
 	
-	private MainWindow app;
+	private View app;
 	
 	private Hero candidate;
 	
@@ -41,16 +41,16 @@ public class Model {
 	
 	public void setCandidate(Hero hero){
 		candidate = hero;
-		app.updateCandidateName();
+		app.mainWindow.updateCandidateName();
 	}
 		
-	public void setApp(MainWindow a) {
+	public void setApp(View a) {
 		app = a;
 	}
 	
 	public void guessCandidate(String name){
 		candidate = Hero.guessFromInput(name);
-		app.updateCandidateName();
+		app.mainWindow.updateCandidateName();
 	}
 	
 	public void initHeroBase() {
@@ -84,7 +84,7 @@ public class Model {
 	Collections.reverse(radiantCores);
 	radiantSupports.sort(null);
 	Collections.reverse(radiantSupports);
-	app.updateSuggestions();
+	app.mainWindow.updateSuggestions();
 	}
 	
 	private ArrayList<Hero> getSupports() {			// returns list of all not-cores from DB
@@ -134,7 +134,7 @@ public class Model {
 		removeByName(direCores, candidate.getName());
 		removeByName(direSupports, candidate.getName());
 		if(currentIndex < 10 ) {
-			for(int i = 0; i < currentIndex; i++) {    								// checking if pick already has this hero
+			for(int i = 0; i < currentIndex; i++) {    									// checking if pick already has this hero and halting process if positive
 				if(wholePick[pickOrder[i]].getName().equals(candidate.getName())) {     // to understand strange index operation see initPickOrder method below
 					System.out.println("дубль геро€");
 					return;
@@ -144,11 +144,11 @@ public class Model {
 				System.out.println("добавили " + candidate.getName());
 				wholePick[pickOrder[currentIndex]] = new Hero(candidate.getName());		// to understand strange index operation see initPickOrder method below
 				wholePick[pickOrder[currentIndex]].setIcon(candidate.getIcon());
-				app.updatePick();
+				app.mainWindow.updatePick();
 				updateSuggestions();
 				currentIndex++;
 				if (currentIndex < 10) {
-					app.updateNextSlotLabel(pickOrder[currentIndex]);
+					app.mainWindow.updateNextSlotLabel(pickOrder[currentIndex]);
 				}
 			} else {
 				System.out.println("ѕредложение пустое");
