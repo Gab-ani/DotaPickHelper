@@ -39,7 +39,7 @@ public class Model {
 		return candidate.getName();
 	}
 	
-	public void setCandidate(Hero hero){
+	public void setCandidate(Hero hero) throws IOException{
 		candidate = hero;
 		app.mainWindow.updateCandidateName();
 	}
@@ -48,7 +48,7 @@ public class Model {
 		app = a;
 	}
 	
-	public void guessCandidate(String name){
+	public void guessCandidate(String name) throws IOException{
 		candidate = Hero.guessFromInput(name);
 		app.mainWindow.updateCandidateName();
 	}

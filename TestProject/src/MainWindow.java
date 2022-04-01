@@ -25,7 +25,11 @@ public class MainWindow {
 	final static int candIconHeight = 144;
 	
 	final static Rectangle textRect = new Rectangle(windowWidth / 2 - 145, windowHeight / 2 + 75, 290, 100);
-	final static Rectangle exitRectangle = new Rectangle(windowWidth / 2 - 170, windowHeight / 2 - 30, 50, 30);
+	
+	final static Rectangle exitRectangle = new Rectangle(windowWidth / 2 - 155, 485, 70, 70);
+	final static Rectangle settingsRectangle = new Rectangle(windowWidth / 2 - 75, 485, 70, 70);
+	final static Rectangle infoRectangle = new Rectangle(windowWidth / 2 + 5, 485, 70, 70);
+	final static Rectangle resetRectangle = new Rectangle(windowWidth / 2 + 85, 485, 70, 70);
 	
 	public View fatherView;
 	
@@ -53,8 +57,38 @@ public class MainWindow {
 	private JButton exitButton;
 	private JButton infoButton;
 	
+	public JButton getResetButton() {
+		return resetButton;
+	}
+	
+	public JButton getSettingsButton() {
+		return settingsButton;
+	}
+	
+	public JButton getExitButton() {
+		return exitButton;
+	}
+	
+	public JButton getInfoButton() {
+		return infoButton;
+	}
+	
 	public void updateNextSlotLabel(int index) {
 		nextHeroSlot.setLocation(pickIcons[index].getLocation().x + heroIconWidth / 2 - nextHeroSlot.getWidth() / 2, pickIcons[index].getLocation().y + heroIconHeight + 10);
+	}
+	
+	public void exit() {
+		System.exit(0);
+	}
+	
+	public void showSettingsWindow() {
+		SettingsWindow settings = new SettingsWindow();
+		settings.setupWindow();
+		getCandidateLabel().requestFocus();
+	}
+	
+	public void showInfo() {
+		
 	}
 	
 	public void updatePick() throws IOException {
@@ -63,14 +97,24 @@ public class MainWindow {
 		}
 	}
 	
+	public void resetSuggestions() throws IOException {
+		for(int i = 0; i < 5; i++) {
+			View.setIconByHero(suggestedSupportRadiant[i], "unknown", 128, 72);
+			View.setIconByHero(suggestedCoreRadiant[i], "unknown", 128, 72);
+			View.setIconByHero(suggestedSupportDire[i], "unknown", 128, 72);
+			View.setIconByHero(suggestedCoreDire[i], "unknown", 128, 72);
+		}
+		
+	}
+	
 	public void updateSuggestions() throws IOException {
 		for(int i = 0; i < 5; i++) {
 			if(!fatherView.model.getPick()[5].getName().equals("unknown")) {	// checks if dire pick is even initialized right now and blocks radiant recommendations from appear
-				suggestedSupportRadiant[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + fatherView.model.radiantSupports.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
-				suggestedCoreRadiant[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + fatherView.model.radiantCores.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
+				View.setIconByHero(suggestedSupportRadiant[i], fatherView.model.radiantSupports.get(i).getName(), 128, 72);
+				View.setIconByHero(suggestedCoreRadiant[i], fatherView.model.radiantCores.get(i).getName(), 128, 72);
 			}
-			suggestedSupportDire[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + fatherView.model.direSupports.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));		
-			suggestedCoreDire[i].setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + fatherView.model.direCores.get(i).getName() + ".png")).getScaledInstance(128, 72, Image.SCALE_SMOOTH)));
+			View.setIconByHero(suggestedSupportDire[i], fatherView.model.direSupports.get(i).getName(), 128, 72);
+			View.setIconByHero(suggestedCoreDire[i], fatherView.model.direCores.get(i).getName(), 128, 72);
 		}
 	}
 	
@@ -78,12 +122,8 @@ public class MainWindow {
 		inputLabel.setText(input);
 	}
 	
-	public void updateCandidateName() {
-		ImageIcon icon = new ImageIcon("resources/icons/" + fatherView.model.getCandidate().getName() + ".png");
-		Image imageToRescale = icon.getImage().getScaledInstance(256, 144, Image.SCALE_SMOOTH);
-		icon = new ImageIcon(imageToRescale);
-		//ImageIcon i = model.getCandidate().getIcon();
-		getCandidateLabel().setIcon(icon);
+	public void updateCandidateName() throws IOException {
+		View.setIconByHero(getCandidateLabel(), fatherView.model.getCandidate().getName(), 256, 144);
 	}
 	
 	public String getInput() {
@@ -118,6 +158,7 @@ public class MainWindow {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setLayout(null);
 		window.setResizable(false);
+//		window.setUndecorated(true);
 		
 		pickIcons = new JLabel[10];
 		
@@ -206,9 +247,23 @@ public class MainWindow {
 			window.add(suggestedCoreDire[i]);
 		}
 		
-		exitButton = new JButton();
+		exitButton = new JButton("exit");
 		exitButton.setBounds(exitRectangle);
 		window.add(exitButton);
+		
+		settingsButton = new JButton("settings");
+		settingsButton.setBounds(settingsRectangle);
+		settingsButton.setVisible(false);
+		window.add(settingsButton);
+		
+		infoButton = new JButton("info");
+		infoButton.setBounds(infoRectangle);
+		window.add(infoButton);
+		
+		resetButton = new JButton("reset");
+		resetButton.setBounds(resetRectangle);
+		window.add(resetButton);
+		
 		
 		input = "";
 		updateCandidateName();

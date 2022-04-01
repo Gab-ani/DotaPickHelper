@@ -32,6 +32,18 @@ public class View {
 		controller = c;
 	}
 	
+	public void reset() throws IOException {
+		model.initPickOrder();
+		model.initTeams();
+		model.initHeroBase();
+		
+		mainWindow.updateCandidateName();
+		mainWindow.updatePick();
+		mainWindow.resetSuggestions();
+		mainWindow.updateNextSlotLabel(0);
+		mainWindow.getCandidateLabel().requestFocus();
+	}
+	
 	private void setupAll() throws IOException {
 		mainWindow = new MainWindow();
 		mainWindow.setView(this);
@@ -43,6 +55,14 @@ public class View {
 		
 		mainWindow.setupWindow();
 		controller.init();
+	}
+	
+	public static void setIconByHero(JButton button, String hero, int neededWidth, int neededHeight) throws IOException {
+		button.setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + hero + ".png")).getScaledInstance(neededWidth, neededHeight, Image.SCALE_SMOOTH)));
+	}
+	
+	public static void setIconByHero(JLabel label, String hero, int neededWidth, int neededHeight) throws IOException {
+		label.setIcon(new ImageIcon(ImageIO.read(new File("resources/icons/" + hero + ".png")).getScaledInstance(neededWidth, neededHeight, Image.SCALE_SMOOTH)));
 	}
 	
 	private void run() throws IOException, ParseException {
