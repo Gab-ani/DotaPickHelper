@@ -31,14 +31,32 @@ public class MainWindow {
 	final static Rectangle infoRectangle = new Rectangle(windowWidth / 2 + 5, 485, 70, 70);
 	final static Rectangle resetRectangle = new Rectangle(windowWidth / 2 + 85, 485, 70, 70);
 	
+	final static int suggestionWidth = 100;
+	final static int suggestionHeight = 50;
+	final static int suggestionSpace = 6;
+	final static int radiantSuggestionsStartX = 15;
+	final static int radiantSuggestionsStartY = 250;
+	final static int direSuggestionsStartX = 950;
+	final static int direSuggestionsStartY = 250;
+	
+	final static int roleIconWidth = 30;
+	final static int roleIconHeight = 30;
+	final static int radiantRoleIconStartX = 65;
+	final static int radiantRoleIconStartY = 210;
+	final static int direRoleIconStartX = 1000;
+	final static int direRoleIconStartY = 210;
+	
+	
 	public View fatherView;
+	
+	private JFrame window;
 	
 	private JLabel[] pickIcons;
 	
-	private JLabel[] suggestedSupportRadiant;
-	private JLabel[] suggestedCoreRadiant;
-	private JLabel[] suggestedSupportDire;
-	private JLabel[] suggestedCoreDire;
+	private JLabel[] roleIconsRadiant;
+	private JLabel[] roleIconsDire;
+	private JLabel[][] suggestionsRadiant;		
+	private JLabel[][] suggestionsDire;
 	
 	private JButton candidateLabel;
 	
@@ -47,10 +65,10 @@ public class MainWindow {
 	
 	private JLabel nextHeroSlot;
 	
-	private JLabel supportLabelRadiant;
-	private JLabel coreLabelRadiant;
-	private JLabel supportLabelDire;
-	private JLabel coreLabelDire;
+//	private JLabel supportLabelRadiant;
+//	private JLabel coreLabelRadiant;
+//	private JLabel supportLabelDire;
+//	private JLabel coreLabelDire;
 	
 	private JButton resetButton;
 	private JButton settingsButton;
@@ -99,22 +117,27 @@ public class MainWindow {
 	
 	public void resetSuggestions() throws IOException {
 		for(int i = 0; i < 5; i++) {
-			View.setIconByHero(suggestedSupportRadiant[i], "unknown", 128, 72);
-			View.setIconByHero(suggestedCoreRadiant[i], "unknown", 128, 72);
-			View.setIconByHero(suggestedSupportDire[i], "unknown", 128, 72);
-			View.setIconByHero(suggestedCoreDire[i], "unknown", 128, 72);
+			for(int j = 0; j < 5; j++) {
+				View.setIconByHero(suggestionsDire[i][j], "unknown", 128, 72);
+			}
 		}
-		
+		for(int i = 0; i < 5; i++) {
+			for(int j = 0; j < 5; j++) {
+				View.setIconByHero(suggestionsRadiant[i][j], "unknown", 128, 72);
+			}
+		}
 	}
 	
 	public void updateSuggestions() throws IOException {
 		for(int i = 0; i < 5; i++) {
-			if(!fatherView.model.getPick()[5].getName().equals("unknown")) {	// checks if dire pick is even initialized right now and blocks radiant recommendations from appear
-				View.setIconByHero(suggestedSupportRadiant[i], fatherView.model.radiantSupports.get(i).getName(), 128, 72);
-				View.setIconByHero(suggestedCoreRadiant[i], fatherView.model.radiantCores.get(i).getName(), 128, 72);
+			for(int j = 0; j < 5; j++) {
+				View.setIconByHero(suggestionsDire[i][j], fatherView.model.direSuggestionPool.get(i).get(j).getName(), 128, 72);
 			}
-			View.setIconByHero(suggestedSupportDire[i], fatherView.model.direSupports.get(i).getName(), 128, 72);
-			View.setIconByHero(suggestedCoreDire[i], fatherView.model.direCores.get(i).getName(), 128, 72);
+		}
+		for(int i = 0; i < 5; i++) {
+			for(int j = 0; j < 5; j++) {
+				View.setIconByHero(suggestionsRadiant[i][j], fatherView.model.radiantSuggestionPool.get(i).get(j).getName(), 128, 72);
+			}
 		}
 	}
 	
@@ -151,9 +174,44 @@ public class MainWindow {
 		updateInputLabel();
 	}
 	
+	public void setupSuggestionLabels() throws IOException {
+		suggestionsDire = new JLabel[5][5];
+		roleIconsDire = new JLabel[5];
+		for(int i = 0; i < 5; i++) {
+			roleIconsDire[i] = new JLabel(i + 1 + "");
+			roleIconsDire[i].setBounds(new Rectangle(direRoleIconStartX + i * (suggestionWidth + suggestionSpace), direRoleIconStartY, roleIconWidth, roleIconHeight));
+			window.add(roleIconsDire[i]);
+			for(int j = 0; j < 5; j++) {
+				suggestionsDire[i][j] = new JLabel();
+				View.setIconByHero(suggestionsDire[i][j], "unknown", suggestionWidth, suggestionHeight);
+				suggestionsDire[i][j].setBounds(new Rectangle(direSuggestionsStartX + i * (suggestionWidth + suggestionSpace), 
+															  direSuggestionsStartY + j * (suggestionHeight + suggestionSpace), 
+															  suggestionWidth,
+															  suggestionHeight));
+				window.add(suggestionsDire[i][j]);
+			}
+		}
+		suggestionsRadiant = new JLabel[5][5];
+		roleIconsRadiant = new JLabel[5];
+		for(int i = 0; i < 5; i++) {
+			roleIconsRadiant[i] = new JLabel(i + 1 + "");
+			roleIconsRadiant[i].setBounds(new Rectangle(radiantRoleIconStartX + i * (suggestionWidth + suggestionSpace), radiantRoleIconStartY, roleIconWidth, roleIconHeight));
+			window.add(roleIconsRadiant[i]);
+			for(int j = 0; j < 5; j++) {
+				suggestionsRadiant[i][j] = new JLabel();
+				View.setIconByHero(suggestionsRadiant[i][j], "unknown", suggestionWidth, suggestionHeight);
+				suggestionsRadiant[i][j].setBounds(new Rectangle(radiantSuggestionsStartX + i * (suggestionWidth + suggestionSpace), 
+															  	 radiantSuggestionsStartY + j * (suggestionHeight + suggestionSpace), 
+															  	 suggestionWidth,
+															  	 suggestionHeight));
+				window.add(suggestionsRadiant[i][j]);
+			}
+		}
+	}
+	
 	public void setupWindow() throws IOException {
 		
-		JFrame window = new JFrame("Dota2Picker");
+		window = new JFrame("Dota2Picker");
 		window.setBounds(new Rectangle(0, 0, windowWidth, windowHeight));
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setLayout(null);
@@ -190,62 +248,10 @@ public class MainWindow {
 		nextHeroSlot.setBounds(new Rectangle(100, 100, 60, 70));
 		updateNextSlotLabel(0);
 		window.add(nextHeroSlot);
-				
-		supportLabelRadiant = new JLabel("сап Radiant");
-//		supportLabel.setIcon(new ImageIcon("icons/support.png"));
-		supportLabelRadiant.setBorder(BorderFactory.createBevelBorder(1));
-		supportLabelRadiant.setBounds(new Rectangle(200, 200, 60, 30));
-		window.add(supportLabelRadiant);
 		
-		suggestedSupportRadiant = new JLabel[5];
-		for(int i = 0; i < suggestedSupportRadiant.length; i++) {
-			suggestedSupportRadiant[i] = new JLabel("" + i);
-			suggestedSupportRadiant[i].setIcon(new ImageIcon("resources/icons/unknown.png"));
-			suggestedSupportRadiant[i].setBounds(new Rectangle(180, 190 + (i+1)*55, 100, 50));
-			window.add(suggestedSupportRadiant[i]);
-		}
+		// TODO make this shit in rectangles
 		
-		coreLabelRadiant = new JLabel("кор Radiant");
-//		supportLabel.setIcon(new ImageIcon("icons/support.png"));
-		coreLabelRadiant.setBorder(BorderFactory.createBevelBorder(1));
-		coreLabelRadiant.setBounds(new Rectangle(400, 200, 60, 30));
-		window.add(coreLabelRadiant);
-		
-		suggestedCoreRadiant = new JLabel[5];
-		for(int i = 0; i < suggestedCoreRadiant.length; i++) {
-			suggestedCoreRadiant[i] = new JLabel("" + i);
-			suggestedCoreRadiant[i].setIcon(new ImageIcon("resources/icons/unknown.png"));
-			suggestedCoreRadiant[i].setBounds(new Rectangle(380, 190 + (i+1)*55, 100, 50));
-			window.add(suggestedCoreRadiant[i]);
-		}
-		
-		supportLabelDire = new JLabel("сап Dire");
-//		supportLabel.setIcon(new ImageIcon("icons/support.png"));
-		supportLabelDire.setBorder(BorderFactory.createBevelBorder(1));
-		supportLabelDire.setBounds(new Rectangle(1050, 200, 60, 30));
-		window.add(supportLabelDire);
-		
-		suggestedSupportDire = new JLabel[5];
-		for(int i = 0; i < suggestedSupportDire.length; i++) {
-			suggestedSupportDire[i] = new JLabel("" + i);
-			suggestedSupportDire[i].setIcon(new ImageIcon("resources/icons/unknown.png"));
-			suggestedSupportDire[i].setBounds(new Rectangle(1030, 190 + (i+1)*55, 100, 50));
-			window.add(suggestedSupportDire[i]);
-		}
-		
-		coreLabelDire = new JLabel("кор Dire");
-//		supportLabel.setIcon(new ImageIcon("icons/support.png"));
-		coreLabelDire.setBorder(BorderFactory.createBevelBorder(1));
-		coreLabelDire.setBounds(new Rectangle(1250, 200, 60, 30));
-		window.add(coreLabelDire);
-		
-		suggestedCoreDire = new JLabel[5];
-		for(int i = 0; i < suggestedCoreDire.length; i++) {
-			suggestedCoreDire[i] = new JLabel("" + i);
-			suggestedCoreDire[i].setIcon(new ImageIcon("resources/icons/unknown.png"));
-			suggestedCoreDire[i].setBounds(new Rectangle(1230, 190 + (i+1)*55, 100, 50));
-			window.add(suggestedCoreDire[i]);
-		}
+		setupSuggestionLabels();
 		
 		exitButton = new JButton("exit");
 		exitButton.setBounds(exitRectangle);
@@ -269,7 +275,6 @@ public class MainWindow {
 		updateCandidateName();
 		updatePick();
 		
-//		window.setUndecorated(true);
 		window.setVisible(true);
 	}
 	

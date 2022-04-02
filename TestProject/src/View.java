@@ -67,6 +67,7 @@ public class View {
 	
 	private void run() throws IOException, ParseException {
 		//model.direCores.forEach(hero -> System.out.println(hero.getAdvantage()));
+		//SQLUtility.setRolesColumn();
 	}
 	
 	public static void main(String[] args) throws IOException, ClassNotFoundException, ParseException {

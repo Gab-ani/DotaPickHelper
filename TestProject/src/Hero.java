@@ -78,7 +78,6 @@ public class Hero implements Comparable<Hero>, Cloneable {
 	public void calculateAdvantage(Hero[] pick) {									// calculates one hero advantage over pick
 		advantage = 0;
 		for(Hero h : pick) {
-			// TODO maybe other way around
 			advantage += advantageTable.getOrDefault(h.name, 0.0);				
 		}
 	}

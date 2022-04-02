@@ -32,7 +32,7 @@ public class SQLUtility {
 	}
 	
 	public static void setRolesColumn() {					// method creates values for column "role" in truenames table in cycle
-		Scanner scan = new Scanner(System.in);				// order of work - read hero name then type "core", "supp" or "both"
+		Scanner scan = new Scanner(System.in);				// order of work - read hero name then type a number [12345]
 		try {																			
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
 			try {

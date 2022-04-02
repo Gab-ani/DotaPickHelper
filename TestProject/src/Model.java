@@ -14,10 +14,8 @@ public class Model {
 	private int currentIndex;
 	private int[] pickOrder;
 	
-	public ArrayList<Hero> radiantSupports;
-	public ArrayList<Hero> radiantCores;
-	public ArrayList<Hero> direSupports;
-	public ArrayList<Hero> direCores;
+	public ArrayList<ArrayList<Hero>> radiantSuggestionPool;
+	public ArrayList<ArrayList<Hero>> direSuggestionPool;
 	
 	private View app;
 	
@@ -55,11 +53,13 @@ public class Model {
 	
 	public void initHeroBase() {
 		candidate = Hero.createUnknown();
+		radiantSuggestionPool = new ArrayList<ArrayList<Hero>>();
+		direSuggestionPool = new ArrayList<ArrayList<Hero>>();
+		for(int i = 1; i < 6; i++) {
+			radiantSuggestionPool.add(selectByRole(i));
+			direSuggestionPool.add(selectByRole(i));
+		}
 		
-		radiantSupports = getSupports();
-		radiantCores = getCores();
-		direSupports = getSupports();
-		direCores = getCores();
 	}
 	
 	public void initTeams() {
@@ -70,24 +70,21 @@ public class Model {
 	}
 	
 	public void updateSuggestions() throws IOException {
-	
-	direCores.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 0, 5)));
-	direSupports.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 0, 5)));
-	radiantCores.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 5, 10)));
-	radiantSupports.forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 5, 10)));
-
-	direCores.sort(null);
-	Collections.reverse(direCores);
-	direSupports.sort(null);
-	Collections.reverse(direSupports);
-	radiantCores.sort(null);
-	Collections.reverse(radiantCores);
-	radiantSupports.sort(null);
-	Collections.reverse(radiantSupports);
-	app.mainWindow.updateSuggestions();
+		for(int i = 0; i < 5; i++) {
+			radiantSuggestionPool.get(i).forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 5, 10)));
+			radiantSuggestionPool.get(i).sort(null);
+			Collections.reverse(radiantSuggestionPool.get(i));
+			System.out.println("мои " + i + "для редиант: " + radiantSuggestionPool.get(i).get(0).getName());
+			direSuggestionPool.get(i).forEach(hero -> hero.calculateAdvantage(Arrays.copyOfRange(wholePick, 0, 5)));
+			direSuggestionPool.get(i).sort(null);
+			Collections.reverse(direSuggestionPool.get(i));
+			System.out.println("мои " + i + "для дайр: " + radiantSuggestionPool.get(i).get(0).getName());
+			
+		}
+		app.mainWindow.updateSuggestions();
 	}
 	
-	private ArrayList<Hero> getSupports() {			// returns list of all not-cores from DB
+	private ArrayList<Hero> selectByRole(int i) {					// i can only be from 1 to 5 and presents role of a hero
 		ArrayList<Hero> heroesList = new ArrayList<Hero>();
 		try {
 			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
@@ -95,28 +92,10 @@ public class Model {
 				Statement getHeroes = con.createStatement();
                 ResultSet heroes = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
                 while (heroes.next()) {
-                	if(!heroes.getString("role").equals("core"))
-                		heroesList.add(new Hero(heroes.getString("truename"), heroes.getString("role")));
-                }
-			} finally {
-				con.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return heroesList;
-	}
-	
-	private ArrayList<Hero> getCores() {				// returns list of all not-supports from DB
-		ArrayList<Hero> heroesList = new ArrayList<>();
-		try {
-			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
-			try {
-				Statement getHeroes = con.createStatement();
-                ResultSet heroes = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
-                while (heroes.next()) {
-                	if(!heroes.getString("role").equals("supp"))
-                		heroesList.add(new Hero(heroes.getString("truename"), heroes.getString("role")));
+                	String role = i + "";
+//                	System.out.println(role);
+                	if(heroes.getString("role").contains(role))
+                		heroesList.add(new Hero(heroes.getString("truename")));
                 }
 			} finally {
 				con.close();
@@ -128,11 +107,11 @@ public class Model {
 	}
 	
 	public void addCandidate() throws IOException, CloneNotSupportedException {						// sets a hero in the next-in-line pick slot 
-
-		removeByName(radiantCores, candidate.getName());
-		removeByName(radiantSupports, candidate.getName());
-		removeByName(direCores, candidate.getName());
-		removeByName(direSupports, candidate.getName());
+		for(int i = 0; i < 5; i++) {
+			removeByName(radiantSuggestionPool.get(i), candidate.getName());
+			removeByName(direSuggestionPool.get(i), candidate.getName());
+		}
+		
 		if(currentIndex < 10 ) {
 			for(int i = 0; i < currentIndex; i++) {    									// checking if pick already has this hero and halting process if positive
 				if(wholePick[pickOrder[i]].getName().equals(candidate.getName())) {     // to understand strange index operation see initPickOrder method below
