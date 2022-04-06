@@ -3,12 +3,12 @@ package application;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,17 +17,17 @@ import org.springframework.stereotype.Component;
 public class Model {
 	
 	@Autowired
-	DraftWindow draftWindow;
+	private DraftWindow draftWindow;
 	@Autowired
-	Controller controller;
+	private PickerDAO pickerDAO;
 	
 	private Hero[] wholePick;
 	private int currentIndex;
 	private int[] pickOrder;
 	
-	public ArrayList<ArrayList<Hero>> radiantSuggestionPool;
-	public ArrayList<ArrayList<Hero>> direSuggestionPool;
-	
+	private ArrayList<ArrayList<Hero>> radiantSuggestionPool;
+	private ArrayList<ArrayList<Hero>> direSuggestionPool;
+
 	private Hero candidate;
 	
 	public Hero[] getPick() {
@@ -45,6 +45,14 @@ public class Model {
 	public String getCandidateName() {
 		return candidate.getName();
 	}
+
+	public ArrayList<ArrayList<Hero>> getRadiantSuggestionPool() {
+		return radiantSuggestionPool;
+	}
+	
+	public ArrayList<ArrayList<Hero>> getDireSuggestionPool() {
+		return direSuggestionPool;
+	}
 	
 	public void setCandidate(Hero hero) throws IOException{
 		candidate = hero;
@@ -52,7 +60,7 @@ public class Model {
 	}
 	
 	public void guessCandidate(String name) throws IOException{
-		candidate = Hero.guessFromInput(name);
+		candidate = guessFromInput(name);
 		draftWindow.updateCandidateName();
 	}
 	
@@ -90,23 +98,51 @@ public class Model {
 	private ArrayList<Hero> selectByRole(int i) {					// i can only be from 1 to 5 and presents role of a hero
 		ArrayList<Hero> heroesList = new ArrayList<Hero>();
 		try {
-			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
-			try {
-				Statement getHeroes = con.createStatement();
-                ResultSet heroes = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
-                while (heroes.next()) {
-                	String role = i + "";
-//                	System.out.println(role);
-                	if(heroes.getString("role").contains(role))
-                		heroesList.add(new Hero(heroes.getString("truename")));
-                }
-			} finally {
-				con.close();
-			}
+			Connection con = pickerDAO.getConnection();
+			Statement getHeroes = con.createStatement();
+            ResultSet heroes = getHeroes.executeQuery("select distinct truename, role from truenames order by truename asc");
+            while (heroes.next()) {
+            	String role = i + "";
+            	if(heroes.getString("role").contains(role)) {
+            		Hero hero = new Hero(heroes.getString("truename"));
+            		setAdvantageTable(hero);
+            		heroesList.add(hero);
+            	}
+            }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return heroesList;
+	}
+	
+	public Hero guessFromInput(String part) {
+		Hero res = Hero.createUnknown();
+		
+		try {
+			Connection con = pickerDAO.getConnection();
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM TRUENAMES");
+			while (rs.next()) {
+				if(compareWithInput(part, rs.getString("jargon"))) {
+					res = new Hero(rs.getString("truename"));
+				}
+			}
+			rs.close();
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	public static boolean compareWithInput(String given, String fetched) {			//  given is a name user typed on the candidate label,
+		char[] givenChars = given.toCharArray();							//  fetched is current jargon-column value from DB
+		char[] fetchedChars = fetched.toCharArray();
+		for(int i = 0; i < Math.min(fetchedChars.length, givenChars.length); i++) {
+			if(fetchedChars[i] != givenChars[i])
+				return false;
+		}
+		return true;
 	}
 	
 	public void addCandidate() throws IOException, CloneNotSupportedException {						// sets a hero in the next-in-line pick slot 
@@ -135,6 +171,23 @@ public class Model {
 				System.out.println("Предложение пустое");
 			}
 		}
+	}
+	
+	private void setAdvantageTable(Hero hero) {								// Initializes advantageTable field
+		HashMap<String, Double> table = new HashMap<>();
+		try {
+            Connection con = pickerDAO.getConnection();
+            Statement stmt = con.createStatement();
+            ResultSet res = stmt.executeQuery("SELECT * FROM " + hero.getName());
+            while (res.next()) {
+            	table.put(res.getString("hero"), res.getDouble("advantage"));
+            }
+            res.close();
+            stmt.close();
+		} catch (Exception e) {
+            e.printStackTrace();
+        }
+		hero.setAdvantageTable(table);
 	}
 	
 	public static String toDotabuffNamingRules(String name) {	// util method, mades a string to to match web address on dotabuff

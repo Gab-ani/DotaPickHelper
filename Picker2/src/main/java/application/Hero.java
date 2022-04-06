@@ -1,9 +1,5 @@
 package application;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.HashMap;
 
 public class Hero implements Comparable<Hero>, Cloneable {
@@ -12,7 +8,7 @@ public class Hero implements Comparable<Hero>, Cloneable {
 	private String iconName;
 	private String role;
 	private double advantage;
-	public HashMap<String, Double> advantageTable;
+	private HashMap<String, Double> advantageTable;
 	
 	public Hero() {
 		
@@ -20,16 +16,18 @@ public class Hero implements Comparable<Hero>, Cloneable {
 	
 	public Hero(String name) {
 		this.name = name;
-		this.fetchAdvantageTable();
 		this.fetchIcon();
 	}
 	
 	public Hero(String name, String role) {
 		this.name = name;
 		this.role = role;
-		
-		this.fetchAdvantageTable();
+
 		this.fetchIcon();
+	}
+	
+	public void setAdvantageTable(HashMap<String, Double> map) {
+		advantageTable = map;
 	}
 	
 	public String getRole() {
@@ -52,16 +50,6 @@ public class Hero implements Comparable<Hero>, Cloneable {
 		return this.name;
 	}
 	
-	public static boolean compareWithInput(String given, String fetched) {			//  given is a name user typed on the candidate label,
-		char[] givenChars = given.toCharArray();							//  fetched is current jargon-column value from DB
-		char[] fetchedChars = fetched.toCharArray();
-		for(int i = 0; i < Math.min(fetchedChars.length, givenChars.length); i++) {
-			if(fetchedChars[i] != givenChars[i])
-				return false;
-		}
-		return true;
-	}
-	
 	public static Hero createUnknown() {											// creates a "blank" Hero object, which exists and could be used in methods,
 		Hero res = new Hero();														// but doesn't represent any particular hero
 		res.name = "unknown";
@@ -77,52 +65,8 @@ public class Hero implements Comparable<Hero>, Cloneable {
 		}
 	}
 	
-	private void fetchAdvantageTable() {								// Initializes advantageTable field
-		this.advantageTable = new HashMap<>();
-		try {
-            Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
-            try {
-                Statement stmt = con.createStatement();
-                ResultSet res = stmt.executeQuery("SELECT * FROM " + this.name);
-                while (res.next()) {
-                	advantageTable.put(res.getString("hero"), res.getDouble("advantage"));
-                }
-                res.close();
-                stmt.close();
-            } finally {
-                con.close();
-            }
-		} catch (Exception e) {
-            e.printStackTrace();
-        }
-	}
-	
 	private void fetchIcon() {
 		this.iconName = "src/main/resources/heroIcons/" + this.name + ".png";
-	}
-	
-	public static Hero guessFromInput(String part) {
-		Hero res = Hero.createUnknown();
-		
-		try {
-			Connection con = DriverManager.getConnection(SQLUtility.baseURL, SQLUtility.login, SQLUtility.password);
-			try {
-				Statement stmt = con.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT * FROM TRUENAMES");
-				while (rs.next()) {
-					if(compareWithInput(part, rs.getString("jargon"))) {
-						res = new Hero(rs.getString("truename"));
-					}
-				}
-				rs.close();
-				stmt.close();
-			} finally {
-				con.close();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return res;
 	}
 	
 	public Object clone() throws CloneNotSupportedException {

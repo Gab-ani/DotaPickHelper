@@ -3,6 +3,7 @@ package application;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import org.springframework.context.annotation.Bean;
 
@@ -11,24 +12,27 @@ public class PickerConfig {
 
 	@Bean
 	public Model model() {
-		Model m = new Model();
-		return m;
+		return new Model();
 	}
 	
 	@Bean
 	public Controller controller() {
-		Controller c = new Controller();
-		return c;
+		return new Controller();
 	}
 	
 	@Bean
 	public DraftWindow draftWindow() throws IOException {
-		DraftWindow w = new DraftWindow();
-		return w;
+		return new DraftWindow();
+	}
+	
+	@Bean
+	public PickerDAO pickerDAO() throws SQLException {
+		return new PickerDAO();
 	}
 	
 	@Bean
 	public DotaPickHelperApplication app() {
 		return new DotaPickHelperApplication();
 	}
+	
 }

@@ -132,13 +132,13 @@ public class DraftWindow {
 	public void updateSuggestions() throws IOException {
 		for(int i = 0; i < 5; i++) {
 			for(int j = 0; j < 5; j++) {
-				setIconByHero(suggestionsDire[i][j], model.direSuggestionPool.get(i).get(j).getIconName(), 128, 72);
+				setIconByHero(suggestionsDire[i][j], model.getDireSuggestionPool().get(i).get(j).getIconName(), 128, 72);
 			}
 		}
 		if(model.getCurrentIndex() > 1) {							// checks if dire pick has heroes
 			for(int i = 0; i < 5; i++) {
 				for(int j = 0; j < 5; j++) {
-					setIconByHero(suggestionsRadiant[i][j], model.radiantSuggestionPool.get(i).get(j).getIconName(), 128, 72);
+					setIconByHero(suggestionsRadiant[i][j], model.getRadiantSuggestionPool().get(i).get(j).getIconName(), 128, 72);
 				}
 			}
 		}
