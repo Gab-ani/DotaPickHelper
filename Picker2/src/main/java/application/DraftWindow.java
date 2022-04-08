@@ -186,7 +186,7 @@ public class DraftWindow {
 		label.setIcon(new ImageIcon(ImageIO.read(new File(path)).getScaledInstance(neededWidth, neededHeight, Image.SCALE_SMOOTH)));
 	}
 	
-	public void setupSuggestionLabels() throws IOException {
+	public void createSuggestionLabels() throws IOException {
 		suggestionsDire = new JLabel[5][5];
 		roleIconsDire = new JLabel[5];
 		for(int i = 0; i < 5; i++) {
@@ -221,15 +221,56 @@ public class DraftWindow {
 		}
 	}
 	
-	public void setupWindow() throws IOException {
-		
-		window = new JFrame("Dota2Picker");
-		window.setBounds(new Rectangle(0, 0, windowWidth, windowHeight));
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setLayout(null);
-		window.setResizable(false);
-//		window.setUndecorated(true);
-		
+	public void createSettingsButton() throws IOException {
+		settingsButton = new JButton("settings");
+		settingsButton.setBounds(settingsRectangle);
+		settingsButton.setVisible(false);
+		window.add(settingsButton);
+	}
+	
+	public void createExitButton() throws IOException {
+		exitButton = new JButton("exit");
+		exitButton.setBounds(exitRectangle);
+		window.add(exitButton);
+	}
+	
+	public void createInfoButton() throws IOException {
+		infoButton = new JButton("info");
+		infoButton.setBounds(infoRectangle);
+//		window.add(infoButton);
+	}
+	
+	public void createResetButton() throws IOException {
+		resetButton = new JButton("reset");
+		resetButton.setBounds(resetRectangle);
+		window.add(resetButton);
+	}
+	
+	public void createInputLabel() throws IOException {
+		inputLabel = new JLabel();
+		inputLabel.setBounds(textRect);
+		inputLabel.setBorder(BorderFactory.createBevelBorder(1));
+		inputLabel.setVerticalAlignment(JLabel.CENTER);
+		inputLabel.setHorizontalAlignment(JLabel.CENTER);
+		inputLabel.setFont(new Font("times new roman", Font.BOLD, 48));
+		window.getContentPane().add(inputLabel);
+	}
+	
+	public void createNextHeroSlot() throws IOException {
+		nextHeroSlot = new JLabel();
+		nextHeroSlot.setIcon(new ImageIcon("src/main/resources/utilImages/upSide1.png"));
+		nextHeroSlot.setBounds(new Rectangle(100, 100, 60, 70));
+		updateNextSlotLabel(0);
+		window.add(nextHeroSlot);
+	}
+	
+	public void createCandidateButton() throws IOException {
+		candidateLabel = new JButton();
+		candidateLabel.setBounds(new Rectangle(window.getWidth() / 2 - candIconWidth / 2, window.getHeight() / 2 - candIconHeight / 2 - 30, candIconWidth, candIconHeight));
+		window.add(candidateLabel);
+	}
+	
+	public void createPickIcons() throws IOException {
 		pickIcons = new JLabel[10];
 		
 		for(int i = 0; i < 5; i++) {		// left row
@@ -243,46 +284,26 @@ public class DraftWindow {
 			pickIcons[i].setBounds(new Rectangle(window.getWidth() - heroIconStartSpaceX - (10-i) * (heroIconWidth + heroIconSpace), heroIconStartSpaceY, heroIconWidth, heroIconHeight));
 			window.add(pickIcons[i]);
 		}
+	}
+	
+	public void setupWindow() throws IOException {
 		
-		candidateLabel = new JButton();
-		candidateLabel.setBounds(new Rectangle(window.getWidth() / 2 - candIconWidth / 2, window.getHeight() / 2 - candIconHeight / 2 - 30, candIconWidth, candIconHeight));
-		window.add(candidateLabel);
+		window = new JFrame("Dota2Picker");
+		window.setBounds(new Rectangle(0, 0, windowWidth, windowHeight));
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setLayout(null);
+		window.setResizable(false);
+//		window.setUndecorated(true);
 		
-		inputLabel = new JLabel();
-		inputLabel.setBounds(textRect);
-		inputLabel.setBorder(BorderFactory.createBevelBorder(1));
-		inputLabel.setVerticalAlignment(JLabel.CENTER);
-		inputLabel.setHorizontalAlignment(JLabel.CENTER);
-		inputLabel.setFont(new Font("times new roman", Font.BOLD, 48));
-		window.getContentPane().add(inputLabel);
-				
-		nextHeroSlot = new JLabel();
-		nextHeroSlot.setIcon(new ImageIcon("src/main/resources/utilImages/upSide1.png"));
-		nextHeroSlot.setBounds(new Rectangle(100, 100, 60, 70));
-		updateNextSlotLabel(0);
-		window.add(nextHeroSlot);
-		
-		// TODO make this shit in rectangles
-		
-		setupSuggestionLabels();
-		
-		exitButton = new JButton("exit");
-		exitButton.setBounds(exitRectangle);
-		window.add(exitButton);
-		
-		settingsButton = new JButton("settings");
-		settingsButton.setBounds(settingsRectangle);
-		settingsButton.setVisible(false);
-		window.add(settingsButton);
-		
-		infoButton = new JButton("info");
-		infoButton.setBounds(infoRectangle);
-		window.add(infoButton);
-		
-		resetButton = new JButton("reset");
-		resetButton.setBounds(resetRectangle);
-		window.add(resetButton);
-		
+		createPickIcons();
+		createCandidateButton();
+		createNextHeroSlot();
+		createInputLabel();
+		createSuggestionLabels();
+		createExitButton();
+		createSettingsButton();
+		createResetButton();
+		createInfoButton();
 		
 		input = "";
 		updateCandidateName();
