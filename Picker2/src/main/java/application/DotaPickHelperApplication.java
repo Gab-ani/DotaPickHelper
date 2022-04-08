@@ -3,7 +3,6 @@ package application;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -19,13 +18,12 @@ public class DotaPickHelperApplication {
 
 	public static void main(String[] args) throws IOException {
 		
-		ApplicationContext context = new AnnotationConfigApplicationContext(PickerConfig.class);
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(PickerConfig.class);
 		
 		DotaPickHelperApplication app = context.getBean(DotaPickHelperApplication.class);
 		app.startUp();
-//		app.run();
 		
-		((AnnotationConfigApplicationContext) context).close();
+		context.close();
 	}
 
 	private void startUp() throws IOException {
@@ -35,13 +33,16 @@ public class DotaPickHelperApplication {
 		draftWindow.setupWindow();
 		controller.init();
 	}
-//	
-//	private void run() {
-//		
-//	}
 
-	public void reset() {
-		// TODO
+	public void reset() throws IOException {
+		model.initPickOrder();
+		model.initTeams();
+		model.initHeroBase();
+		draftWindow.updateCandidateName();
+		draftWindow.updatePick();
+		draftWindow.resetSuggestions();
+		draftWindow.updateNextSlotLabel(0);
+		draftWindow.getCandidateLabel().requestFocus();
 	}
 	
 }
