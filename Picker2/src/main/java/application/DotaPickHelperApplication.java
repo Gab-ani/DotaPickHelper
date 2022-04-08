@@ -34,8 +34,15 @@ public class DotaPickHelperApplication {
 		controller.init();
 	}
 
-	public void reset() {
-		// TODO
+	public void reset() throws IOException {
+		model.initPickOrder();
+		model.initTeams();
+		model.initHeroBase();
+		draftWindow.updateCandidateName();
+		draftWindow.updatePick();
+		draftWindow.resetSuggestions();
+		draftWindow.updateNextSlotLabel(0);
+		draftWindow.getCandidateLabel().requestFocus();
 	}
 	
 }

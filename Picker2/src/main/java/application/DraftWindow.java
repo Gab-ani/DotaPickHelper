@@ -1,7 +1,11 @@
 package application;
 
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -50,9 +55,9 @@ public class DraftWindow {
 	
 	final static int roleIconWidth = 30;
 	final static int roleIconHeight = 30;
-	final static int radiantRoleIconStartX = 65;
+	final static int radiantRoleIconStartX = 50;
 	final static int radiantRoleIconStartY = 210;
-	final static int direRoleIconStartX = 1000;
+	final static int direRoleIconStartX = 985;
 	final static int direRoleIconStartY = 210;
 	
 	private JFrame window;
@@ -185,7 +190,7 @@ public class DraftWindow {
 		suggestionsDire = new JLabel[5][5];
 		roleIconsDire = new JLabel[5];
 		for(int i = 0; i < 5; i++) {
-			roleIconsDire[i] = new JLabel(i + 1 + "");
+			roleIconsDire[i] = new JLabel(new ImageIcon("src/main/resources/utilImages/" + (i + 1) + ".png"));
 			roleIconsDire[i].setBounds(new Rectangle(direRoleIconStartX + i * (suggestionWidth + suggestionSpace), direRoleIconStartY, roleIconWidth, roleIconHeight));
 			window.add(roleIconsDire[i]);
 			for(int j = 0; j < 5; j++) {
@@ -201,7 +206,7 @@ public class DraftWindow {
 		suggestionsRadiant = new JLabel[5][5];
 		roleIconsRadiant = new JLabel[5];
 		for(int i = 0; i < 5; i++) {
-			roleIconsRadiant[i] = new JLabel(i + 1 + "");
+			roleIconsRadiant[i] = new JLabel(new ImageIcon("src/main/resources/utilImages/" + (i + 1) + ".png"));
 			roleIconsRadiant[i].setBounds(new Rectangle(radiantRoleIconStartX + i * (suggestionWidth + suggestionSpace), radiantRoleIconStartY, roleIconWidth, roleIconHeight));
 			window.add(roleIconsRadiant[i]);
 			for(int j = 0; j < 5; j++) {
@@ -248,10 +253,11 @@ public class DraftWindow {
 		inputLabel.setBorder(BorderFactory.createBevelBorder(1));
 		inputLabel.setVerticalAlignment(JLabel.CENTER);
 		inputLabel.setHorizontalAlignment(JLabel.CENTER);
-		window.add(inputLabel);
+		inputLabel.setFont(new Font("times new roman", Font.BOLD, 48));
+		window.getContentPane().add(inputLabel);
 				
 		nextHeroSlot = new JLabel();
-		nextHeroSlot.setIcon(new ImageIcon("src/main/resources/heroIcons/upSide1.png"));
+		nextHeroSlot.setIcon(new ImageIcon("src/main/resources/utilImages/upSide1.png"));
 		nextHeroSlot.setBounds(new Rectangle(100, 100, 60, 70));
 		updateNextSlotLabel(0);
 		window.add(nextHeroSlot);

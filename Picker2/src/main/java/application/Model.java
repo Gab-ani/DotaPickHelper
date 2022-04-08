@@ -154,7 +154,7 @@ public class Model {
 		if(currentIndex < 10 ) {
 			for(int i = 0; i < currentIndex; i++) {    									// checking if pick already has this hero and halting process if positive
 				if(wholePick[pickOrder[i]].getName().equals(candidate.getName())) {     // to understand strange index operation see initPickOrder method below
-					System.out.println("дубль героя");
+//					System.out.println("дубль героя");									// TODO logger?
 					return;
 				}
 			}
@@ -168,7 +168,7 @@ public class Model {
 					draftWindow.updateNextSlotLabel(pickOrder[currentIndex]);
 				}
 			} else {
-				System.out.println("Предложение пустое");
+//				System.out.println("Предложение пустое");								// TODO logger?
 			}
 		}
 	}
