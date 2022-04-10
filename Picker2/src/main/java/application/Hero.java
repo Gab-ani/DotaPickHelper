@@ -16,14 +16,14 @@ public class Hero implements Comparable<Hero>, Cloneable {
 	
 	public Hero(String name) {
 		this.name = name;
-		this.fetchIcon();
+		fetchIcon();
 	}
 	
 	public Hero(String name, String role) {
 		this.name = name;
 		this.role = role;
 
-		this.fetchIcon();
+		fetchIcon();
 	}
 	
 	public void setAdvantageTable(HashMap<String, Double> map) {
@@ -31,7 +31,7 @@ public class Hero implements Comparable<Hero>, Cloneable {
 	}
 	
 	public String getRole() {
-		return this.role;
+		return role;
 	}
 	
 	public void setName(String n) {
@@ -39,15 +39,15 @@ public class Hero implements Comparable<Hero>, Cloneable {
 	}
 	
 	public String getIconName() {
-		return this.iconName;
+		return iconName;
 	}
 	
 	public double getAdvantage() {
-		return this.advantage;
+		return advantage;
 	}
 	
 	public String getName() {
-		return this.name;
+		return name;
 	}
 	
 	public static Hero createUnknown() {											// creates a "blank" Hero object, which exists and could be used in methods,
@@ -66,7 +66,7 @@ public class Hero implements Comparable<Hero>, Cloneable {
 	}
 	
 	private void fetchIcon() {
-		this.iconName = "src/main/resources/heroIcons/" + this.name + ".png";
+		iconName = "src/main/resources/heroIcons/" + name + ".png";
 	}
 	
 	public Object clone() throws CloneNotSupportedException {
