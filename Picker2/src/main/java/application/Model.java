@@ -161,6 +161,7 @@ public class Model {
 			if(getCandidateName() != "unknown") {
 				System.out.println("добавили " + candidate.getName());
 				wholePick[pickOrder[currentIndex]] = new Hero(candidate.getName());		// to understand strange index operation see initPickOrder method below
+				setAdvantageTable(wholePick[pickOrder[currentIndex]]);
 				draftWindow.updatePick();
 				updateSuggestions();
 				currentIndex++;
@@ -171,6 +172,9 @@ public class Model {
 //				System.out.println("Предложение пустое");								// TODO logger?
 			}
 		}
+		
+		if(currentIndex == 10)
+			draftWindow.showFinalAdvantages();
 	}
 	
 	private void setAdvantageTable(Hero hero) {								// Initializes advantageTable field

@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -40,7 +41,7 @@ public class DraftWindow {
 	final static Rectangle exitRectangle = new Rectangle(windowWidth / 2 - 155, 485, 70, 70);
 	final static Rectangle settingsRectangle = new Rectangle(windowWidth / 2 - 75, 485, 70, 70);
 	final static Rectangle infoRectangle = new Rectangle(windowWidth / 2 + 5, 485, 70, 70);
-	final static Rectangle resetRectangle = new Rectangle(windowWidth / 2 + 85, 485, 70, 70);
+	final static Rectangle resetRectangle = new Rectangle(windowWidth / 2 - 65, 485, 210, 70);
 	
 	final static int suggestionWidth = 100;
 	final static int suggestionHeight = 50;
@@ -143,6 +144,26 @@ public class DraftWindow {
 					setIconByHero(suggestionsRadiant[i][j], model.getRadiantSuggestionPool().get(i).get(j).getIconName(), 128, 72);
 				}
 			}
+		}
+	}
+	
+	public void showFinalAdvantages() {
+		double direSum = 0;
+		double radiantSum = 0;
+		for(int i = 0; i < 5; i++) {
+			model.getPick()[i].calculateAdvantage(Arrays.copyOfRange(model.getPick(), 5, 10));
+			radiantSum += model.getPick()[i].getAdvantage();
+		}
+		for(int i = 5; i < 10; i++) {
+			model.getPick()[i].calculateAdvantage(Arrays.copyOfRange(model.getPick(), 0, 5));
+			direSum += model.getPick()[i].getAdvantage();
+		}
+		System.out.println("преимущество дайр: " + direSum);
+		System.out.println("преимущество редиант: " + radiantSum);
+		if(direSum > radiantSum) {
+			resetButton.setText((int)(direSum - radiantSum) + " за дайр");
+		} else {
+			resetButton.setText((int)(radiantSum - direSum)  + " за редиант");
 		}
 	}
 	
