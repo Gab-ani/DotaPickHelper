@@ -11,3 +11,4 @@ ______________________________________________________________________
 The data about counters contained in 123 tables (one per hero) with 122 lines in them - each hero pair (hero1-hero2 pair != hero2-hero1 pair).
 Right now, data updating mechanism is parsing 123 hero advantage pages from dotabuff.com (requests the latest patch). On roughly 80 kb/s internet, updating process takes about 100-120 seconds. At the moment, user can't call the update method from UI, it only possible through uncommenting the source code (application still in progress tho).
 ____________________________________________________________________________
+![изображение](https://user-images.githubusercontent.com/25298003/166165066-d676c0a1-0656-47ce-935a-b2f9e57017c0.png)
