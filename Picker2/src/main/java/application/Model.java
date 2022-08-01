@@ -18,8 +18,7 @@ public class Model {
 	
 	@Autowired
 	private DraftWindow draftWindow;
-	@Autowired
-	private PickerDAO pickerDAO;
+	@Autowired PickerDAO pickerDAO;
 	
 	private Hero[] wholePick;
 	private int currentIndex;
@@ -159,7 +158,7 @@ public class Model {
 				}
 			}
 			if(getCandidateName() != "unknown") {
-				System.out.println("добавили " + candidate.getName());
+//				System.out.println("добавили " + candidate.getName());
 				wholePick[pickOrder[currentIndex]] = new Hero(candidate.getName());		// to understand strange index operation see initPickOrder method below
 				setAdvantageTable(wholePick[pickOrder[currentIndex]]);
 				draftWindow.updatePick();

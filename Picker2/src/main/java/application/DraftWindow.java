@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
@@ -66,6 +67,9 @@ public class DraftWindow {
 	private JLabel[] roleIconsDire;
 	private JLabel[][] suggestionsRadiant;		
 	private JLabel[][] suggestionsDire;
+	
+	private JLabel[] radiantTotalAdvantages;
+	private JLabel[] direTotalAdvantages;
 	
 	private JButton candidateLabel;
 	
@@ -165,6 +169,32 @@ public class DraftWindow {
 		} else {
 			resetButton.setText((int)(radiantSum - direSum)  + " за редиант");
 		}
+		
+
+		
+		System.out.println();
+		DecimalFormat df = new DecimalFormat("0.00");
+		for(int i = 0; i < 10; i++) {
+			if(i == 5)
+				System.out.println("------------------");
+			System.out.println(String.format("%20s", model.getPick()[i].getName()) + "   " + df.format(model.getPick()[i].getAdvantage()));
+		}
+		
+//		resetTotalAdvantageArrays();
+//		for(int i = 0; i < 5; i++) {
+//			radiantTotalAdvantages[i].setText("" + model.getPick()[i].getAdvantage());
+//			radiantTotalAdvantages[i].setSize(50, 50);
+//			radiantTotalAdvantages[i].setLocation(pickIcons[i].getLocation().x + heroIconWidth / 2 - nextHeroSlot.getWidth() / 2, pickIcons[i].getLocation().y + heroIconHeight + 10);
+//			window.add(radiantTotalAdvantages[i]);
+//		}
+//		for(int i = 0; i < 5; i++) {
+//			direTotalAdvantages[i].setText("" + model.getPick()[i + 5].getAdvantage());
+//			direTotalAdvantages[i].setSize(50, 50);
+//			direTotalAdvantages[i].setLocation(pickIcons[i + 5].getLocation().x + heroIconWidth / 2 - nextHeroSlot.getWidth() / 2, pickIcons[i + 5].getLocation().y + heroIconHeight + 10);
+//			window.add(direTotalAdvantages[i]);
+//		}
+		
+		nextHeroSlot.setVisible(false);
 	}
 	
 	public void updateInputLabel() {
@@ -304,6 +334,30 @@ public class DraftWindow {
 		}
 	}
 	
+	public void resetTotalAdvantageArrays() {
+		radiantTotalAdvantages = new JLabel[5];
+		for(int i = 0; i < 5; i++) {
+			radiantTotalAdvantages[i].setText("");
+		}
+		direTotalAdvantages = new JLabel[5];
+		for(int i = 0; i < 5; i++) {
+			direTotalAdvantages[i].setText("");
+		}
+	}
+	
+	public void createTotalAdvantageArrays() {
+		radiantTotalAdvantages = new JLabel[5];
+		for(int i = 0; i < 5; i++) {
+			radiantTotalAdvantages[i] = new JLabel("");
+			window.add(radiantTotalAdvantages[i]);
+		}
+		direTotalAdvantages = new JLabel[5];
+		for(int i = 0; i < 5; i++) {
+			direTotalAdvantages[i] = new JLabel("");
+			window.add(direTotalAdvantages[i]);
+		}
+	}
+	
 	public void setupWindow() throws IOException {
 		
 		window = new JFrame("Dota2Picker");
@@ -322,6 +376,7 @@ public class DraftWindow {
 		createSettingsButton();
 		createResetButton();
 		createInfoButton();
+		createTotalAdvantageArrays();
 		
 		input = "";
 		updateCandidateName();

@@ -32,12 +32,15 @@ public class DotaPickHelperApplication {
 		model.initHeroBase();
 		draftWindow.setupWindow();
 		controller.init();
+		
+//		model.pickerDAO.createAdvantageTables("");
 	}
 
 	public void reset() throws IOException {
 		model.initPickOrder();
 		model.initTeams();
 		model.initHeroBase();
+		draftWindow.createTotalAdvantageArrays();
 		draftWindow.updateCandidateName();
 		draftWindow.updatePick();
 		draftWindow.resetSuggestions();

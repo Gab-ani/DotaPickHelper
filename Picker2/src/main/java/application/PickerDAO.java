@@ -17,7 +17,7 @@ public class PickerDAO {
 	private static final String driver = "org.postgresql.Driver";
 	private static final String baseURL = "jdbc:postgresql://localhost:5432/Dota2Picker";
 	private static final String login = "postgres";
-	private static final String password = "pstgrs2022gfhjkm";
+	private static final String password = "postgres";
 	
 	private Connection connection;
 	
@@ -67,7 +67,7 @@ public class PickerDAO {
 		scan.close();
 	}
 	
-	public void createAdvantageTables() {
+	public void createAdvantageTables(String date) {
 		
 		try {
             Statement getHeroes = connection.createStatement();
@@ -84,6 +84,9 @@ public class PickerDAO {
             	String table = heroesList.getString("truename");
             	createTable.executeUpdate("create table if not exists " + table + " ( hero text, advantage real )");
                 String url = String.format("https://ru.dotabuff.com/heroes/%s/counters", Model.toDotabuffNamingRules(heroesList.getString("truename")));
+                if(date != "") {
+                	url += "?date=" + date;
+                }
                 DotabuffDataFetcher fetcher = new DotabuffDataFetcher();
                 fetcher.setUrl(url);
                 HashMap<String, Double> advantageTable = fetcher.fetchAdvantageTable();
